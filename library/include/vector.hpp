@@ -3,6 +3,7 @@
 class Vector {
 public:
     Vector(float x = 0, float y = 0, float z = 0);
+    Vector(const Vector& other);
 
     float x() const;
     float y() const;
@@ -27,6 +28,10 @@ public:
 
     Vector crossProduct(const Vector& other) const;
     float dotProduct(const Vector& other) const;
+
+    Vector normalize() const;
+    Vector reflect(const Vector& normal) const;
+    Vector lerp(const Vector& other, float t) const;
 
 private:
     float mX;

@@ -11,6 +11,8 @@ namespace
 Vector::Vector(const float x, const float y, const float z) : mX(x), mY(y), mZ(z) {
 }
 
+Vector::Vector(const Vector &other) = default;
+
 float Vector::x() const {
     return mX;
 }
@@ -93,3 +95,22 @@ Vector Vector::crossProduct(const Vector &other) const {
 float Vector::dotProduct(const Vector &other) const {
     return mX * other.mX + mY * other.mY + mZ * other.mZ;
 }
+
+Vector Vector::normalize() const {
+    const float len = length();
+    if (len != 0.0f)
+    {
+        return {*this/len};
+    }
+    throw std::runtime_error("could not normalize");
+}
+
+Vector Vector::reflect(const Vector &normal) const {
+    return *this - (normal * this->dotProduct(normal) * 2.0f);
+}
+
+Vector Vector::lerp(const Vector &other, const float t) const {
+    return {mX + t * (other.mX - mX), mY + t * (other.mY - mY), mZ + t * (other.mZ - mZ)};
+}
+
+
