@@ -15,6 +15,19 @@ public:
     float lengthSquared() const;
     bool isUnit() const;
 
+    Vector& operator=(const Vector& other);
+    Vector operator*(float scalar) const;
+    void negate();
+    Vector operator/(float scalar) const;
+
+    Vector operator+(const Vector& other) const;
+    Vector operator-(const Vector& other) const;
+    Vector operator*(const Vector& other) const;
+    Vector operator/(const Vector& other) const;
+
+    Vector crossProduct(const Vector& other) const;
+    float dotProduct(const Vector& other) const;
+
 private:
     float mX;
     float mY;
