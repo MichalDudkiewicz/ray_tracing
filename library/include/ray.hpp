@@ -3,7 +3,7 @@
 class Ray {
 public:
     Ray();
-    Ray(const Vector& o, const Vector& d);
+    Ray(const Vector& origin, const Vector& direction, float distance = 0.0f);
 
     const Vector& origin() const;
     const Vector& direction() const;

@@ -3,7 +3,7 @@
 Ray::Ray() : mOrigin(), mDirection(), mDistance(0.0f) {
 }
 
-Ray::Ray(const Vector &o, const Vector &d) : mOrigin(o), mDirection(d), mDistance(0.0f) {
+Ray::Ray(const Vector &origin, const Vector &direction, const float distance) : mOrigin(origin), mDirection(direction), mDistance(distance) {
 }
 
 const Vector &Ray::origin() const {
