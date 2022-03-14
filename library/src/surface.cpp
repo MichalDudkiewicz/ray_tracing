@@ -1,4 +1,4 @@
-#include "surface.hpp"
+#include "library/include/surface.hpp"
 
 #include <cmath>
 
@@ -41,5 +41,6 @@ std::optional<Vector> Surface::intersectionPoint(const Ray &ray) const {
     float x_cross = ray.origin().x() - (wX * ratio);
     float y_cross = ray.origin().y() - (wY * ratio);
     float z_cross = ray.origin().z() - (wZ * ratio);
+
     return Vector{x_cross, y_cross, z_cross};
 }

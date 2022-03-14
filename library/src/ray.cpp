@@ -1,4 +1,4 @@
-#include "ray.hpp"
+#include "library/include/ray.hpp"
 
 Ray::Ray() : mOrigin(), mDirection(), mDistance(0.0f) {
 }
