@@ -3,6 +3,7 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "surface.hpp"
+#include "vector_operators.hpp"
 
 using namespace std;
 
@@ -53,11 +54,15 @@ int main() {
     //podpunkt 8
     //Prosz� znale�� punkt przeci�cia p�aszczyzny P z promieniem R2.
 
-    
-        
-    //p.intersectionPoint(r2);
 
-    cout<<p.intersectionPoint(r2).has_value();
+    auto point = p.intersectionPoint(r2);
+
+    if (point.has_value())
+    {
+        cout << point.value();
+
+    }
+
     
     return 0;
 }
