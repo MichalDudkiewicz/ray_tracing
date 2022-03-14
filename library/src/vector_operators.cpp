@@ -1,4 +1,4 @@
-#include "library/include/vector_operators.hpp"
+#include "vector_operators.hpp"
 
 #include <cmath>
 

@@ -1,36 +1,36 @@
 #include <iostream>
-#include "library/src/vector.cpp"
-#include "library/src/ray.cpp"
-#include "library/src/sphere.cpp"
-#include "library/src/surface.cpp"
+#include "vector.hpp"
+#include "ray.hpp"
+#include "sphere.hpp"
+#include "surface.hpp"
 
 using namespace std;
 
 int main() {
     
     //podpunkt 2
-    //Zdefiniowaæ sferê S o œrodku w punkcie (0,0,0) i promieniu 10
+    //Zdefiniowaï¿½ sferï¿½ S o ï¿½rodku w punkcie (0,0,0) i promieniu 10
     Vector centreSphere(0, 0, 0);
     Sphere sphere(centreSphere, 10);
 
     //podpunkt 3
-    //Zdefiniowaæ promieñ R1 o pocz¹tku w punkcie (0,0,-20) i skierowany w œrodek kuli
+    //Zdefiniowaï¿½ promieï¿½ R1 o poczï¿½tku w punkcie (0,0,-20) i skierowany w ï¿½rodek kuli
     Vector r1Origin(0, 0, -20);
     Ray r1(r1Origin, centreSphere, 1000);
 
     //podpunkt 4
-    //Zdefiniowaæ promieñ R2 o pocz¹tku w tym samym punkcie, co R1, skierowany równolegle do osi Y
-    //parametry x i z punktu koñcowego wektora nie zmieniaja sie = wektor rownolegly do y
+    //Zdefiniowaï¿½ promieï¿½ R2 o poczï¿½tku w tym samym punkcie, co R1, skierowany rï¿½wnolegle do osi Y
+    //parametry x i z punktu koï¿½cowego wektora nie zmieniaja sie = wektor rownolegly do y
     Vector r2end(0, 1000, -20);
     Ray r2(r1Origin, r2end, 1000);
 
     //podpunkt 5
-    //Proszê sprawdziæ, czy istnieje przeciêcie sfery S z promieniami R1 oraz R2. Wynik w postaci wspó³rzêdnych punktu przeciêcia nale¿y wyœwietliæ.
+    //Proszï¿½ sprawdziï¿½, czy istnieje przeciï¿½cie sfery S z promieniami R1 oraz R2. Wynik w postaci wspï¿½rzï¿½dnych punktu przeciï¿½cia naleï¿½y wyï¿½wietliï¿½.
 
 
     //podpunkt 6
-    //zdefiniowaæ dowolny promieñ R3, tak aby przecina³ on sferê S w dok³adnie jednym punkcie.Podaæ wspó³rzêdne punktu przeciêcia.
-    //czyli np. promien rownoleg³y do jednej z osi ukladu, znajdujacy sie w odleglosci rownej promieniowi sfery
+    //zdefiniowaï¿½ dowolny promieï¿½ R3, tak aby przecinaï¿½ on sferï¿½ S w dokï¿½adnie jednym punkcie.Podaï¿½ wspï¿½rzï¿½dne punktu przeciï¿½cia.
+    //czyli np. promien rownolegï¿½y do jednej z osi ukladu, znajdujacy sie w odleglosci rownej promieniowi sfery
 
     Vector r3origin(0, 0, 10);
     Vector r3end(0, 20, 10);
@@ -42,16 +42,16 @@ int main() {
     cout << "Podpunkt 6: " <<sphere.intersect(r3, distance)<<endl;
 
     //podpunkt 7
-    //Proszê zdefiniowaæ p³aszczyznê P przechodz¹c¹ przez punkt(0, 0, 0), której wektor normalny tworzy k¹t 45 stopni z osiami Y i Z.
+    //Proszï¿½ zdefiniowaï¿½ pï¿½aszczyznï¿½ P przechodzï¿½cï¿½ przez punkt(0, 0, 0), ktï¿½rej wektor normalny tworzy kï¿½t 45 stopni z osiami Y i Z.
     // czyli y=z
 
-    Vector surfacePoint1 = (0, 0, 0);
-    Vector surfacePoint2 = (0, 100, 100);
+    Vector surfacePoint1(0, 0, 0);
+    Vector surfacePoint2(0, 100, 100);
 
     Surface p(surfacePoint1, surfacePoint2);
 
     //podpunkt 8
-    //Proszê znaleŸæ punkt przeciêcia p³aszczyzny P z promieniem R2.
+    //Proszï¿½ znaleï¿½ï¿½ punkt przeciï¿½cia pï¿½aszczyzny P z promieniem R2.
 
     
         

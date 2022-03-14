@@ -6,3 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(ray_tracing main.cpp)
 
 add_subdirectory(library)
+
+target_link_libraries(ray_tracing PUBLIC library)

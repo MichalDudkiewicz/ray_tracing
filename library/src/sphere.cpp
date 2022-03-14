@@ -1,4 +1,4 @@
-#include "library/include/sphere.hpp"
+#include "sphere.hpp"
 #include <cmath>
 
 Sphere::Sphere(const Vector &center, float radius) : mCenter(center), mRadius(radius) {

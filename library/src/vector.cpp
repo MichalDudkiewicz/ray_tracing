@@ -1,4 +1,4 @@
-#include "library/include/vector.hpp"
+#include "vector.hpp"
 
 #include <cmath>
 #include <stdexcept>
