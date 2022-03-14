@@ -2,10 +2,7 @@
 
 #include "vector.hpp"
 #include "ray.hpp"
-
-enum IntersectionCase {
-    MISS, HIT, INPRIM
-};
+#include <vector>
 
 class Sphere {
 public:
@@ -15,7 +12,7 @@ public:
     float radius() const;
 
     bool isOnSurface(const Vector& point) const;
-    IntersectionCase intersect(const Ray& ray, float& dist) const;
+    std::vector<Vector> intersect(const Ray& ray) const;
 
 private:
     Vector mCenter;

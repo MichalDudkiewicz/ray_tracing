@@ -1,5 +1,7 @@
 #include "sphere.hpp"
 #include <cmath>
+#include <vector>
+#include "vector_operators.hpp"
 
 Sphere::Sphere(const Vector &center, float radius) : mCenter(center), mRadius(radius) {
 }
@@ -17,28 +19,39 @@ bool Sphere::isOnSurface(const Vector &point) const {
     return (pointOriginDiff.dotProduct(pointOriginDiff) - powf(mRadius, 2.0f)) == 0.0f;
 }
 
-IntersectionCase Sphere::intersect(const Ray &ray, float &dist) const {
+std::vector<Vector> Sphere::intersect(const Ray &ray) const {
+    const float dist = ray.distance();
     Vector v = ray.origin() - mCenter;
-    float b = -v.dotProduct(ray.direction());
-    float det = (b * b) - v.dotProduct(v) + powf(mRadius, 2.0f);
-    IntersectionCase intersectionCase = MISS;
-    if (det > 0) {
-        det = sqrtf(det);
-        float i1 = b - det;
-        float i2 = b + det;
-        if (i2 > 0) {
-            if (i1 < 0) {
-                if (i2 < dist) {
-                    dist = i2;
-                    intersectionCase = INPRIM;
-                }
-            } else {
-                if (i1 < dist) {
-                    dist = i1;
-                    intersectionCase = HIT;
-                }
-            }
+//    float b = -v.dotProduct(ray.direction());
+//    float det = (b * b) - v.dotProduct(v) + powf(mRadius, 2.0f);
+    const float b = - ray.direction().dotProduct(v);
+    const float a = ray.direction().dotProduct(ray.direction());
+    const float delta = ray.direction().dotProduct(v)*ray.direction().dotProduct(v)
+            - ray.direction().dotProduct(ray.direction()) * (v.dotProduct(v) - powf(mRadius, 2.0f));
+    std::vector<Vector> intersectionPoints;
+    if (delta > 0) {
+        const auto det = sqrtf(delta);
+        float i1 = (b - det) / a;
+        float i2 = (b + det) / a;
+        if (i2 >= 0 && i2 <= dist)
+        {
+            Vector intersectionPoint = ray.origin() + i2 * ray.direction();
+            intersectionPoints.push_back(intersectionPoint);
+        }
+        if (i1 >= 0 && i1 <= dist)
+        {
+            Vector intersectionPoint = ray.origin() + i1 * ray.direction();
+            intersectionPoints.push_back(intersectionPoint);
         }
     }
-    return intersectionCase;
+    else if (delta == 0)
+    {
+        float i1 = b / a;
+        if (i1 >= 0 && i1 <= dist)
+        {
+            Vector intersectionPoint = ray.origin() + i1 * ray.direction();
+            intersectionPoints.push_back(intersectionPoint);
+        }
+    }
+    return intersectionPoints;
 }

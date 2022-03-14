@@ -3,9 +3,8 @@
 #include "ray.hpp"
 #include "sphere.hpp"
 #include "surface.hpp"
+#include <vector>
 #include "vector_operators.hpp"
-
-using namespace std;
 
 int main() {
     
@@ -39,8 +38,16 @@ int main() {
     Ray r3(r3origin, r3end, 1000);
     
 
-    float distance = 1000;
-    cout << "Podpunkt 6: " <<sphere.intersect(r3, distance)<<endl;
+    std::vector<Vector> intersectionPoints = sphere.intersect(r3);
+    std::cout << "Podpunkt 6: \n";
+    if (!intersectionPoints.empty())
+    {
+        for (const auto& intersectionPoint : intersectionPoints)
+        {
+            std::cout <<intersectionPoint<< '\n';
+        }
+    }
+
 
     //podpunkt 7
     //Prosz� zdefiniowa� p�aszczyzn� P przechodz�c� przez punkt(0, 0, 0), kt�rej wektor normalny tworzy k�t 45 stopni z osiami Y i Z.
@@ -54,12 +61,11 @@ int main() {
     //podpunkt 8
     //Prosz� znale�� punkt przeci�cia p�aszczyzny P z promieniem R2.
 
-
-    auto point = p.intersectionPoint(r2);
+    const auto point = p.intersectionPoint(r3);
 
     if (point.has_value())
     {
-        cout << point.value();
+        std::cout << point.value();
 
     }
 
