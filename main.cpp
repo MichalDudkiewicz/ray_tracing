@@ -7,7 +7,6 @@
 #include "vector_operators.hpp"
 
 int main() {
-    
     //podpunkt 2
     //Zdefiniowa� sfer� S o �rodku w punkcie (0,0,0) i promieniu 10
     Vector centreSphere(0, 0, 0);
@@ -26,7 +25,25 @@ int main() {
 
     //podpunkt 5
     //Prosz� sprawdzi�, czy istnieje przeci�cie sfery S z promieniami R1 oraz R2. Wynik w postaci wsp�rz�dnych punktu przeci�cia nale�y wy�wietli�.
+    std::vector<Vector> intersectionPoints5a = sphere.intersect(r1);
+    std::cout << "Podpunkt 5 - R1: \n";
+    if (!intersectionPoints5a.empty())
+    {
+        for (const auto& intersectionPoint : intersectionPoints5a)
+        {
+            std::cout <<intersectionPoint<< '\n';
+        }
+    }
 
+    std::vector<Vector> intersectionPoints5b = sphere.intersect(r2);
+    std::cout << "Podpunkt 5 - R2: \n";
+    if (!intersectionPoints5b.empty())
+    {
+        for (const auto& intersectionPoint : intersectionPoints5b)
+        {
+            std::cout <<intersectionPoint<< '\n';
+        }
+    }
 
     //podpunkt 6
     //zdefiniowa� dowolny promie� R3, tak aby przecina� on sfer� S w dok�adnie jednym punkcie.Poda� wsp�rz�dne punktu przeci�cia.
@@ -36,7 +53,6 @@ int main() {
     Vector r3end(0, 20, 10);
 
     Ray r3(r3origin, r3end, 1000);
-    
 
     std::vector<Vector> intersectionPoints = sphere.intersect(r3);
     std::cout << "Podpunkt 6: \n";
@@ -69,6 +85,5 @@ int main() {
 
     }
 
-    
     return 0;
 }
