@@ -15,7 +15,8 @@ int main() {
     //podpunkt 3
     //Zdefiniowa� promie� R1 o pocz�tku w punkcie (0,0,-20) i skierowany w �rodek kuli
     Vector r1Origin(0, 0, -20);
-    Ray r1(r1Origin, centreSphere, 1000);
+    Vector centreSphereDirection(0, 0, 20);
+    Ray r1(r1Origin, centreSphereDirection, 1000);
 
     //podpunkt 4
     //Zdefiniowa� promie� R2 o pocz�tku w tym samym punkcie, co R1, skierowany r�wnolegle do osi Y
