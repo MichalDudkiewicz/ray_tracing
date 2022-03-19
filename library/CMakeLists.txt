@@ -1,4 +1,4 @@
-project(ray_tracing_library)
+project(library)
 
 add_library(library STATIC
         src/vector.cpp
@@ -9,4 +9,7 @@ add_library(library STATIC
         src/light_intensity.cpp
         )
 
-target_include_directories(library PUBLIC include)
+target_include_directories(library PUBLIC include EasyBMP_1.06)
+
+add_subdirectory(EasyBMP_1.06)
+target_link_libraries(library PUBLIC EasyBMP)
