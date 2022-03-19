@@ -146,7 +146,7 @@ void task2()
         const auto centerX = -1.0f + (i + 0.5f) * pixelWidth;
         for (int j = 0; j < image2.TellHeight(); j++)
         {
-            const auto centerY = -1.0f + (j + 0.5f) * pixelHeight;
+            const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
             const Ray ray({centerX, centerY, 0}, {centerX, centerY, 1.0}, 200.0f);
             const auto intersection = sphere.intersect(ray);
             if (!intersection.empty())
