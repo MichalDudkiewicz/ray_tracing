@@ -5,8 +5,12 @@
 #include "surface.hpp"
 #include <vector>
 #include "vector_operators.hpp"
+#include "EasyBMP_BMP.h"
+#include "EasyBMP_DataStructures.h"
+#include "light_intensity.hpp"
 
-int main() {
+void task1()
+{
     //podpunkt 2
     //Zdefiniowa� sfer� S o �rodku w punkcie (0,0,0) i promieniu 10
     Vector centreSphere(0, 0, 0);
@@ -85,6 +89,44 @@ int main() {
         std::cout << point.value();
 
     }
+}
+
+
+
+void task2()
+{
+    constexpr unsigned int kImageWidth = 800;
+    constexpr unsigned int kImageHeight = 600;
+    constexpr unsigned int kBitDepth = 32;
+
+    BMP image;
+    image.SetSize(kImageWidth, kImageHeight);
+    image.SetBitDepth(kBitDepth);
+
+    LightIntensity lightIntensity(0.0, 1.0, 0.0);
+    const auto red = (int)(lightIntensity.red() * 255);
+    const auto green = (int)(lightIntensity.green() * 255);
+    const auto blue = (int)(lightIntensity.blue() * 255);
+
+    RGBApixel rgbaPixel;
+    rgbaPixel.Red = red;
+    rgbaPixel.Green = green;
+    rgbaPixel.Blue = blue;
+    for (int i = 0; i < kImageWidth; i++)
+    {
+        for (int j = 0; j < kImageHeight; j++)
+        {
+            image.SetPixel(i, j, rgbaPixel);
+        }
+    }
+
+    image.WriteToFile("test_image.bmp");
+}
+
+int main() {
+//    task1();
+
+    task2();
 
     return 0;
 }
