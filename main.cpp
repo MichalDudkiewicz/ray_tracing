@@ -96,12 +96,12 @@ void task1()
 void task2()
 {
     constexpr unsigned int kImageWidth = 800;
-    constexpr unsigned int kImageHeight = 600;
+    constexpr unsigned int kImageHeight = 800;
     constexpr unsigned int kBitDepth = 32;
 
-    BMP image;
-    image.SetSize(kImageWidth, kImageHeight);
-    image.SetBitDepth(kBitDepth);
+    BMP image1;
+    image1.SetSize(kImageWidth, kImageHeight);
+    image1.SetBitDepth(kBitDepth);
 
     LightIntensity lightIntensity(0.0, 1.0, 0.0);
     const auto red = (int)(lightIntensity.red() * 255);
@@ -116,11 +116,47 @@ void task2()
     {
         for (int j = 0; j < kImageHeight; j++)
         {
-            image.SetPixel(i, j, rgbaPixel);
+            image1.SetPixel(i, j, rgbaPixel);
         }
     }
 
-    image.WriteToFile("test_image.bmp");
+    image1.WriteToFile("uniform_color.bmp");
+
+
+
+    BMP image2;
+    image2.SetSize(kImageWidth, kImageHeight);
+    image2.SetBitDepth(kBitDepth);
+
+    LightIntensity lightIntensity2;
+    const auto red2 = (int)(lightIntensity2.red() * 255);
+    const auto green2 = (int)(lightIntensity2.green() * 255);
+    const auto blue2 = (int)(lightIntensity2.blue() * 255);
+
+    RGBApixel rgbaPixel2;
+    rgbaPixel2.Red = red2;
+    rgbaPixel2.Green = green2;
+    rgbaPixel2.Blue = blue2;
+
+    const float pixelWidth = 2.0f / kImageWidth;
+    const float pixelHeight = 2.0f / kImageHeight;
+    Sphere sphere({0, 0, 0}, .5f);
+    for (int i = 0; i < image2.TellWidth(); i++)
+    {
+        const auto centerX = -1.0f + (i + 0.5f) * pixelWidth;
+        for (int j = 0; j < image2.TellHeight(); j++)
+        {
+            const auto centerY = -1.0f + (j + 0.5f) * pixelHeight;
+            const Ray ray({centerX, centerY, 0}, {centerX, centerY, 1.0}, 200.0f);
+            const auto intersection = sphere.intersect(ray);
+            if (!intersection.empty())
+            {
+                image2.SetPixel(i, j, rgbaPixel);
+            }
+            else image2.SetPixel(i, j, rgbaPixel2);
+        }
+    }
+    image2.WriteToFile("sphere.bmp");
 }
 
 int main() {
