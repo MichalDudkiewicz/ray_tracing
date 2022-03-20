@@ -2,6 +2,7 @@
 
 #include "vector.hpp"
 #include "ray.hpp"
+#include "EasyBMP_BMP.h"
 
 class Scene;
 
@@ -24,7 +25,7 @@ public:
     void setFov(float fov);
     float fov() const;
 
-    void render() const;
+    BMP render() const;
 
 protected:
     virtual Ray createRay(float pixelX, float pixelY) const = 0;

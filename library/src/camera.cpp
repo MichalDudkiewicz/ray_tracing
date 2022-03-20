@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "scene.hpp"
 #include "vector_operators.hpp"
+#include "EasyBMP_BMP.h"
 #include <cmath>
 
 void Camera::setPosition(const Vector &newPosition) {
@@ -65,12 +66,14 @@ Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
 
 }
 
-void Camera::render() const {
-    auto& image = mScene.image();
-    const int ny = image.TellHeight();
+BMP Camera::render() const {
+    constexpr unsigned int kBitDepth = 32;
+    BMP image;
+    image.SetBitDepth(kBitDepth);
+    constexpr int ny = 600;
     const int nx = (int)(ny * mNearPlane * tanf((mFov / 2.0f) * M_PIf32 / 180.f));
-    image.SetSize(nx, ny);
-    const float screenProportion = (float)nx/(float)ny;
+    const float screenProportion = 2.0f;
+    image.SetSize(nx, (int)(nx/screenProportion));
     Vector lowerLeftCorner(-screenProportion, -1.0f, -1.0f);
     Vector horizontal(2.0f * screenProportion, 0.0f, 0.0f);
     Vector vertical(0.0f, 2.0f, 0.0f);
@@ -110,4 +113,5 @@ void Camera::render() const {
             }
         }
     }
+    return image;
 }

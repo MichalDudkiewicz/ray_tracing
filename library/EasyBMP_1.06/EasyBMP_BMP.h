@@ -21,6 +21,7 @@
 #ifndef _EasyBMP_BMP_h_
 #define _EasyBMP_BMP_h_
 
+#include <cstdio>
 #include "EasyBMP_DataStructures.h"
 
 bool SafeFread( char* buffer, int size, int number, FILE* fp );

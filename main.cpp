@@ -104,8 +104,8 @@ void task2()
     scene.addPrimitive(sphere);
     scene.addPrimitive(sphere2);
     scene.camera().setFov(120.0);
-    scene.camera().render();
-    scene.saveImage();
+    auto image = scene.camera().render();
+    image.WriteToFile("rendered_scene.bmp");
 }
 
 int main() {
