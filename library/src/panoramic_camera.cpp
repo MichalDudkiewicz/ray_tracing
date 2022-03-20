@@ -10,5 +10,5 @@ PanoramicCamera::PanoramicCamera(Scene &scene, const Vector &position, const Vec
 }
 
 Ray PanoramicCamera::createRay(float pixelX, float pixelY) const {
-    return {mPosition, {pixelX, pixelY, -1.0}, mFarPlane};
+    return {mPosition, {pixelX, pixelY, -mNearPlane}, mFarPlane};
 }
