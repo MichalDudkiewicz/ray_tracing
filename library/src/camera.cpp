@@ -1,4 +1,5 @@
 #include "camera.hpp"
+#include "scene.hpp"
 
 void Camera::setPosition(const Vector &newPosition) {
     mPosition = newPosition;
@@ -48,14 +49,56 @@ float Camera::fov() const {
     return mFov;
 }
 
-Camera::Camera() : mPosition(0, 0, 0), mTarget(0, 0, 1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0) {
+Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, 1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0) {
 }
 
-Camera::Camera(const Vector &position, const Vector &target)
-: mPosition(position),
+Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
+: mScene(scene),
+  mPosition(position),
   mTarget(target),
   mNearPlane(1),
   mFarPlane(1000),
   mUp(0, 1, 0) {
 
+}
+
+void Camera::render() const {
+    auto& image = mScene.image();
+    const float pixelWidth = 2.0f / image.TellWidth();
+    const float pixelHeight = 2.0f / image.TellHeight();
+    for (int i = 0; i < image.TellWidth(); i++)
+    {
+        const auto centerX = -1.0f + (i + 0.5f) * pixelWidth;
+        for (int j = 0; j < image.TellHeight(); j++)
+        {
+            const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
+            const Ray ray({centerX, centerY, 0}, {0, 0, 1.0}, 200.0f);
+
+            float minZIntersection = mFarPlane;
+            for (const auto& primitive : mScene.primitives())
+            {
+                const auto intersection = primitive.intersect(ray);
+                if (!intersection.empty())
+                {
+                    const auto& minZIntersectionPoint = intersection.front();
+                    if (minZIntersectionPoint.z() < minZIntersection)
+                    {
+                        image.SetPixel(i, j, primitive.color());
+                        minZIntersection = minZIntersectionPoint.z();
+                    }
+                    if (intersection.size() > 1)
+                    {
+                        for (int k = 1; k < intersection.size(); k++)
+                        {
+                            if (intersection[k].z() < minZIntersection)
+                            {
+                                image.SetPixel(i, j, primitive.color());
+                                minZIntersection = intersection[k].z();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

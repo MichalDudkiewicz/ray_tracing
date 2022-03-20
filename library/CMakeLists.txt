@@ -8,6 +8,7 @@ add_library(library STATIC
         src/surface.cpp
         src/light_intensity.cpp
         src/camera.cpp
+        src/scene.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

@@ -2,10 +2,12 @@
 
 #include "vector.hpp"
 
+class Scene;
+
 class Camera {
 public:
-    Camera();
-    Camera(const Vector& position, const Vector& target);
+    Camera(Scene& scene);
+    Camera(Scene& scene, const Vector& position, const Vector& target);
 
 public:
     void setPosition(const Vector& newPosition);
@@ -21,7 +23,10 @@ public:
     void setFov(float fov);
     float fov() const;
 
+    void render() const;
+
 private:
+    Scene& mScene;
     Vector mPosition;
     Vector mTarget;
     Vector mUp;

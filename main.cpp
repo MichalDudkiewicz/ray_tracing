@@ -8,6 +8,7 @@
 #include "EasyBMP_BMP.h"
 #include "EasyBMP_DataStructures.h"
 #include "light_intensity.hpp"
+#include "scene.hpp"
 
 void task1()
 {
@@ -95,68 +96,15 @@ void task1()
 
 void task2()
 {
-    constexpr unsigned int kImageWidth = 800;
-    constexpr unsigned int kImageHeight = 800;
-    constexpr unsigned int kBitDepth = 32;
-
-    BMP image1;
-    image1.SetSize(kImageWidth, kImageHeight);
-    image1.SetBitDepth(kBitDepth);
-
-    LightIntensity lightIntensity(0.0, 1.0, 0.0);
-    const auto red = (int)(lightIntensity.red() * 255);
-    const auto green = (int)(lightIntensity.green() * 255);
-    const auto blue = (int)(lightIntensity.blue() * 255);
-
-    RGBApixel rgbaPixel;
-    rgbaPixel.Red = red;
-    rgbaPixel.Green = green;
-    rgbaPixel.Blue = blue;
-    for (int i = 0; i < kImageWidth; i++)
-    {
-        for (int j = 0; j < kImageHeight; j++)
-        {
-            image1.SetPixel(i, j, rgbaPixel);
-        }
-    }
-
-    image1.WriteToFile("uniform_color.bmp");
-
-
-
-    BMP image2;
-    image2.SetSize(kImageWidth, kImageHeight);
-    image2.SetBitDepth(kBitDepth);
-
-    LightIntensity lightIntensity2;
-    const auto red2 = (int)(lightIntensity2.red() * 255);
-    const auto green2 = (int)(lightIntensity2.green() * 255);
-    const auto blue2 = (int)(lightIntensity2.blue() * 255);
-
-    RGBApixel rgbaPixel2;
-    rgbaPixel2.Red = red2;
-    rgbaPixel2.Green = green2;
-    rgbaPixel2.Blue = blue2;
-
-    const float pixelWidth = 2.0f / kImageWidth;
-    const float pixelHeight = 2.0f / kImageHeight;
-    Sphere sphere({0, 0, 0}, .5f);
-    for (int i = 0; i < image2.TellWidth(); i++)
-    {
-        const auto centerX = -1.0f + (i + 0.5f) * pixelWidth;
-        for (int j = 0; j < image2.TellHeight(); j++)
-        {
-            const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
-            const Ray ray({centerX, centerY, 0}, {centerX, centerY, 1.0}, 200.0f);
-            const auto intersection = sphere.intersect(ray);
-            if (!intersection.empty())
-            {
-                image2.SetPixel(i, j, rgbaPixel);
-            }
-            else image2.SetPixel(i, j, rgbaPixel2);
-        }
-    }
-    image2.WriteToFile("sphere.bmp");
+    Scene scene;
+    Sphere sphere({0, 0, 0}, 0.5f);
+    sphere.setColor({1, 0, 0});
+    Sphere sphere2({0, 0, 20}, 1.0f);
+    sphere2.setColor({0, 1, 0});
+    scene.addPrimitive(sphere);
+    scene.addPrimitive(sphere2);
+    scene.camera().render();
+    scene.saveImage();
 }
 
 int main() {
