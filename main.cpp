@@ -103,6 +103,7 @@ void task2()
     sphere2.setColor({0, 1, 0});
     scene.addPrimitive(sphere);
     scene.addPrimitive(sphere2);
+    scene.camera().setFov(120.0);
     scene.camera().render();
     scene.saveImage();
 }

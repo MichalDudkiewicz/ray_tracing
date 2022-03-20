@@ -10,7 +10,7 @@ class Scene {
 public:
     Scene();
 
-    const Camera& camera() const;
+    Camera& camera();
 
     void addPrimitive(const Sphere& sphere);
 

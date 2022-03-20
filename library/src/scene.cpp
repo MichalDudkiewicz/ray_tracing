@@ -8,7 +8,7 @@ Scene::Scene() : mImage(), mCamera(*this), mPrimitives() {
     mImage.SetBitDepth(kBitDepth);
 }
 
-const Camera& Scene::camera() const {
+Camera& Scene::camera() {
     return mCamera;
 }
 

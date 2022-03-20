@@ -1,6 +1,7 @@
 #include "camera.hpp"
 #include "scene.hpp"
 #include "vector_operators.hpp"
+#include <cmath>
 
 void Camera::setPosition(const Vector &newPosition) {
     mPosition = newPosition;
@@ -50,7 +51,7 @@ float Camera::fov() const {
     return mFov;
 }
 
-Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, 1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0) {
+Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, 1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0), mFov(100.0f) {
 }
 
 Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
@@ -59,13 +60,17 @@ Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
   mTarget(target),
   mNearPlane(1),
   mFarPlane(1000),
-  mUp(0, 1, 0) {
+  mUp(0, 1, 0),
+  mFov(100.0f) {
 
 }
 
 void Camera::render() const {
     auto& image = mScene.image();
-    const float screenProportion = (float)image.TellWidth()/(float)image.TellHeight();
+    const int ny = image.TellHeight();
+    const int nx = (int)(ny * mNearPlane * tanf((mFov / 2.0f) * M_PIf32 / 180.f));
+    image.SetSize(nx, ny);
+    const float screenProportion = (float)nx/(float)ny;
     Vector lowerLeftCorner(-screenProportion, -1.0f, -1.0f);
     Vector horizontal(2.0f * screenProportion, 0.0f, 0.0f);
     Vector vertical(0.0f, 2.0f, 0.0f);
