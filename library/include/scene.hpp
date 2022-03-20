@@ -2,6 +2,9 @@
 #include "camera.hpp"
 #include "sphere.hpp"
 #include "EasyBMP_BMP.h"
+#include "orthographic_camera.hpp"
+#include "panoramic_camera.hpp"
+#include <memory>
 
 class Scene {
 public:
@@ -19,7 +22,7 @@ public:
 
 private:
     BMP mImage;
-    Camera mCamera;
+    PanoramicCamera mCamera;
     std::vector<Sphere> mPrimitives;
 };
 

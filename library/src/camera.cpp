@@ -72,7 +72,7 @@ void Camera::render() const {
         for (int j = 0; j < image.TellHeight(); j++)
         {
             const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
-            const Ray ray({centerX, centerY, 0}, {0, 0, 1.0}, 200.0f);
+            const Ray ray = createRay(centerX, centerY);
 
             float minZIntersection = mFarPlane;
             for (const auto& primitive : mScene.primitives())

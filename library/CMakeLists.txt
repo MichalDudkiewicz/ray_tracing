@@ -9,6 +9,8 @@ add_library(library STATIC
         src/light_intensity.cpp
         src/camera.cpp
         src/scene.cpp
+        src/orthographic_camera.cpp
+        src/panoramic_camera.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

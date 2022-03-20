@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vector.hpp"
+#include "ray.hpp"
 
 class Scene;
 
@@ -25,7 +26,10 @@ public:
 
     void render() const;
 
-private:
+protected:
+    virtual Ray createRay(float pixelX, float pixelY) const = 0;
+
+protected:
     Scene& mScene;
     Vector mPosition;
     Vector mTarget;

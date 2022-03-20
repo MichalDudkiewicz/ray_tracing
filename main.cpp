@@ -97,9 +97,9 @@ void task1()
 void task2()
 {
     Scene scene;
-    Sphere sphere({0, 0, 0}, 0.5f);
+    Sphere sphere({0, 0, -10}, 1.0f);
     sphere.setColor({1, 0, 0});
-    Sphere sphere2({0, 0, 20}, 1.0f);
+    Sphere sphere2({0, 0, -20}, 1.0f);
     sphere2.setColor({0, 1, 0});
     scene.addPrimitive(sphere);
     scene.addPrimitive(sphere2);
