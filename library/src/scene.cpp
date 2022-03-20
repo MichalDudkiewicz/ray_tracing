@@ -2,7 +2,7 @@
 
 Scene::Scene() : mImage(), mCamera(*this), mPrimitives() {
     constexpr unsigned int kImageWidth = 800;
-    constexpr unsigned int kImageHeight = 800;
+    constexpr unsigned int kImageHeight = 600;
     constexpr unsigned int kBitDepth = 32;
     mImage.SetSize(kImageWidth, kImageHeight);
     mImage.SetBitDepth(kBitDepth);

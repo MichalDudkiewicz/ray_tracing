@@ -1,5 +1,6 @@
 #include "camera.hpp"
 #include "scene.hpp"
+#include "vector_operators.hpp"
 
 void Camera::setPosition(const Vector &newPosition) {
     mPosition = newPosition;
@@ -64,15 +65,18 @@ Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
 
 void Camera::render() const {
     auto& image = mScene.image();
-    const float pixelWidth = 2.0f / image.TellWidth();
-    const float pixelHeight = 2.0f / image.TellHeight();
+    const float screenProportion = (float)image.TellWidth()/(float)image.TellHeight();
+    Vector lowerLeftCorner(-screenProportion, -1.0f, -1.0f);
+    Vector horizontal(2.0f * screenProportion, 0.0f, 0.0f);
+    Vector vertical(0.0f, 2.0f, 0.0f);
     for (int i = 0; i < image.TellWidth(); i++)
     {
-        const auto centerX = -1.0f + (i + 0.5f) * pixelWidth;
+        const float u = float(i + 0.5) / float(image.TellWidth());
         for (int j = 0; j < image.TellHeight(); j++)
         {
-            const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
-            const Ray ray = createRay(centerX, centerY);
+            const float v = 1.0f - float(j + 0.5) / float(image.TellHeight());
+            const Vector pixelPoint(lowerLeftCorner + u*horizontal + v*vertical);
+            const Ray ray = createRay(pixelPoint.x(), pixelPoint.y());
 
             float minZIntersection = -mFarPlane;
             for (const auto& primitive : mScene.primitives())
