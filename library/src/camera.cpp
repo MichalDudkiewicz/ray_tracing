@@ -74,14 +74,14 @@ void Camera::render() const {
             const auto centerY = 1.0f - (j + 0.5f) * pixelHeight;
             const Ray ray = createRay(centerX, centerY);
 
-            float minZIntersection = mFarPlane;
+            float minZIntersection = -mFarPlane;
             for (const auto& primitive : mScene.primitives())
             {
                 const auto intersection = primitive.intersect(ray);
                 if (!intersection.empty())
                 {
                     const auto& minZIntersectionPoint = intersection.front();
-                    if (minZIntersectionPoint.z() < minZIntersection)
+                    if (minZIntersectionPoint.z() > minZIntersection)
                     {
                         image.SetPixel(i, j, primitive.color());
                         minZIntersection = minZIntersectionPoint.z();
@@ -90,7 +90,7 @@ void Camera::render() const {
                     {
                         for (int k = 1; k < intersection.size(); k++)
                         {
-                            if (intersection[k].z() < minZIntersection)
+                            if (intersection[k].z() > minZIntersection)
                             {
                                 image.SetPixel(i, j, primitive.color());
                                 minZIntersection = intersection[k].z();
