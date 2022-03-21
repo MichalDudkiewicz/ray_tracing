@@ -6,8 +6,6 @@
 #include "EasyBMP_BMP.h"
 #include <cmath>
 
-
-
 void Camera::setPosition(const Vector &newPosition) {
     mPosition = newPosition;
 }
@@ -86,6 +84,26 @@ BMP Camera::render() const {
     const Vector c = -screenProportion * u - 1.0f * v - mNearPlane * w;
     const Vector b(2.0f * v);
     const Vector a(2 * screenProportion * u);
+
+    RGBApixel backgroundColor;
+    backgroundColor.Red = 180;
+    backgroundColor.Blue = 180;
+    backgroundColor.Green = 180;
+    backgroundColor.Alpha = 255;
+
+    
+
+    for (int i = 0; i < image.TellWidth(); i++)
+    {
+
+        for (int j = 0; j < image.TellHeight(); j++)
+        {
+            image.SetPixel(i, j, backgroundColor);
+
+        }
+
+    }
+
     for (int i = 0; i < image.TellWidth(); i++)
     {
         const float x = float(i + 0.5) / float(image.TellWidth());
