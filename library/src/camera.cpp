@@ -52,7 +52,7 @@ float Camera::fov() const {
     return mFov;
 }
 
-Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, 1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0), mFov(100.0f) {
+Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, -1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0), mFov(100.0f) {
 }
 
 Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
@@ -72,18 +72,23 @@ BMP Camera::render() const {
     image.SetBitDepth(kBitDepth);
     constexpr int ny = 600;
     const int nx = (int)(ny * mNearPlane * tanf((mFov / 2.0f) * M_PIf32 / 180.f));
-    const float screenProportion = 2.0f;
+    constexpr float screenProportion = 2.0f;
     image.SetSize(nx, (int)(nx/screenProportion));
-    Vector lowerLeftCorner(-screenProportion, -1.0f, -1.0f);
-    Vector horizontal(2.0f * screenProportion, 0.0f, 0.0f);
-    Vector vertical(0.0f, 2.0f, 0.0f);
+
+    const Vector w = (-1.0f) * mTarget.normalize();
+    const Vector u = mUp.crossProduct(w) / mUp.crossProduct(w).length();
+    const Vector v = w.crossProduct(u);
+
+    const Vector c = -screenProportion * u - 1.0f * v - mNearPlane * w;
+    const Vector b(2.0f * v);
+    const Vector a(2 * screenProportion * u);
     for (int i = 0; i < image.TellWidth(); i++)
     {
-        const float u = float(i + 0.5) / float(image.TellWidth());
+        const float x = float(i + 0.5) / float(image.TellWidth());
         for (int j = 0; j < image.TellHeight(); j++)
         {
-            const float v = 1.0f - float(j + 0.5) / float(image.TellHeight());
-            const Vector pixelPoint(lowerLeftCorner + u*horizontal + v*vertical);
+            const float y = 1.0f - float(j + 0.5) / float(image.TellHeight());
+            const Vector pixelPoint(c + x*a + y*b);
             const Ray ray = createRay(pixelPoint.x(), pixelPoint.y());
 
             float minZIntersection = -mFarPlane;
