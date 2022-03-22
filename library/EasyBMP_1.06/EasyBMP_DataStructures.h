@@ -67,7 +67,9 @@ typedef struct RGBApixel {
 	ebmpBYTE Green;
 	ebmpBYTE Red;
 	ebmpBYTE Alpha;
-} RGBApixel; 
+} RGBApixel;
+
+bool operator==(const RGBApixel& first, const RGBApixel& second);
 
 class BMFH{
 public:

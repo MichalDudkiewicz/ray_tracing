@@ -1903,3 +1903,8 @@ bool Rescale( BMP& InputImage , char mode, int NewDimension )
  *InputImage(NewWidth-1,NewHeight-1) = *OldImage(OldWidth-1,OldHeight-1);
  return true;
 }
+
+bool operator==(const RGBApixel& first, const RGBApixel& second)
+{
+    return first.Red == second.Red && first.Green == second.Green && first.Blue == second.Blue && first.Alpha == second.Alpha;
+}

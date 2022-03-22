@@ -30,6 +30,10 @@ public:
 protected:
     virtual Ray createRay(float pixelX, float pixelY) const = 0;
 
+private:
+    void dividePixel(const Vector& center, float width, float height, int& redSum, int& greenSum, int& blueSum, int& sum, int depth = 1) const;
+    RGBApixel getColorByPosition(const Vector& position) const;
+
 protected:
     Scene& mScene;
     Vector mPosition;
