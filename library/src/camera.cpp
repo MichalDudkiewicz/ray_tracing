@@ -89,7 +89,7 @@ void Camera::dividePixel(const Vector& center, float width, float height, int& r
             g += color.Green;
             b += color.Blue;
         }
-        const int weight = kMaxDepth - depth + 1;
+        const int weight = pow(2, kMaxDepth - depth);
         redSum += weight * r / 4;
         greenSum += weight * g / 4;
         blueSum += weight * b / 4;
