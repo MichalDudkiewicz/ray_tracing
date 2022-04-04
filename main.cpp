@@ -9,6 +9,7 @@
 #include "EasyBMP_DataStructures.h"
 #include "light_intensity.hpp"
 #include "scene.hpp"
+#include "triangle.hpp"
 
 void task1()
 {
@@ -111,7 +112,19 @@ void task2()
 int main() {
 //    task1();
 
-    task2();
+//    task2();
+
+    Vector p1(0, 0, 0);
+    Vector p2(10, 0, 0);
+    Vector p3(0, 10, 0);
+    Vector p4(0, 0, 10);
+    Triangle triangle(p1, p2, p3);
+
+    Vector p(5, 5, 0);
+    Ray r3(p, p4, 1000);
+
+    const auto point = triangle.intersection(r3);
+
 
     return 0;
 }

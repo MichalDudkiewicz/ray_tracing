@@ -11,6 +11,8 @@ add_library(library STATIC
         src/scene.cpp
         src/orthographic_camera.cpp
         src/panoramic_camera.cpp
+        src/primitive.cpp
+        src/triangle.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)
