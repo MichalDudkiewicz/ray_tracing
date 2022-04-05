@@ -7,7 +7,7 @@
 
 class Triangle : public Primitive {
 public:
-    Triangle(const Vector& a, const Vector& b, const Vector& c);
+    Triangle(const Vector& a, const Vector& b, const Vector& c, const Vector& normal);
 
     std::optional<Vector> intersection(const Ray& ray) const override;
 

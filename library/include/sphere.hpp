@@ -1,12 +1,13 @@
 #pragma once
 
 #include "vector.hpp"
+#include "primitive.hpp"
 #include "ray.hpp"
 #include "light_intensity.hpp"
 #include "EasyBMP_DataStructures.h"
 #include <vector>
 
-class Sphere {
+class Sphere : public Primitive {
 public:
     Sphere(const Vector& center, float radius = 0.0f);
 
@@ -14,7 +15,7 @@ public:
     float radius() const;
 
     bool isOnSurface(const Vector& point) const;
-    std::vector<Vector> intersect(const Ray& ray) const;
+    std::optional<Vector> intersection(const Ray& ray) const override;
 
     void setColor(const LightIntensity& color);
     RGBApixel color() const;

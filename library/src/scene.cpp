@@ -7,10 +7,10 @@ Camera& Scene::camera() {
     return mCamera;
 }
 
-void Scene::addPrimitive(const Sphere &sphere) {
-    mPrimitives.push_back(sphere);
+void Scene::addMesh(const Mesh &mesh) {
+    mMeshes.push_back(mesh);
 }
 
-const std::vector<Sphere> &Scene::primitives() const {
-    return mPrimitives;
+const std::vector<Mesh> &Scene::meshes() const {
+    return mMeshes;
 }

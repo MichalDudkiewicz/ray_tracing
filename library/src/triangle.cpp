@@ -3,8 +3,8 @@
 
 #define MINUS_ZERO -0.0001
 
-Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c)
-: mA(a), mB(b), mC(c), mNormal((mB - mA).crossProduct(mC - mA))
+Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c, const Vector &normal)
+: mA(a), mB(b), mC(c), mNormal(normal)
 {
 
 }

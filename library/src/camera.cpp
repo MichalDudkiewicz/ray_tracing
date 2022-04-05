@@ -169,26 +169,46 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
     float minZIntersection = -mFarPlane;
     RGBApixel color = kBackgroundColor;
     const Ray ray = createRay(position.x(), position.y());
-    for (const auto& primitive : mScene.primitives())
+//    for (const auto& primitive : mScene.primitives())
+//    {
+//        const auto intersection = primitive.intersect(ray);
+//        if (!intersection.empty())
+//        {
+//            const auto& minZIntersectionPoint = intersection.front();
+//            if (minZIntersectionPoint.z() > minZIntersection)
+//            {
+//                color = primitive.color();
+//                minZIntersection = minZIntersectionPoint.z();
+//            }
+//            if (intersection.size() > 1)
+//            {
+//                for (int k = 1; k < intersection.size(); k++)
+//                {
+//                    if (intersection[k].z() > minZIntersection)
+//                    {
+//                        color = primitive.color();
+//                        minZIntersection = intersection[k].z();
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    for (const auto& mesh : mScene.meshes())
     {
-        const auto intersection = primitive.intersect(ray);
-        if (!intersection.empty())
+        for (const auto& primitive : mesh.primitives())
         {
-            const auto& minZIntersectionPoint = intersection.front();
-            if (minZIntersectionPoint.z() > minZIntersection)
+            const auto intersection = primitive->intersection(ray);
+            if (intersection.has_value())
             {
-                color = primitive.color();
-                minZIntersection = minZIntersectionPoint.z();
-            }
-            if (intersection.size() > 1)
-            {
-                for (int k = 1; k < intersection.size(); k++)
+                const auto& minZIntersectionPoint = intersection.value();
+                if (minZIntersectionPoint.z() > minZIntersection)
                 {
-                    if (intersection[k].z() > minZIntersection)
-                    {
-                        color = primitive.color();
-                        minZIntersection = intersection[k].z();
-                    }
+                    color.Red = 255;
+                    color.Green = 0;
+                    color.Blue = 0;
+                    color.Alpha = 255;
+                    minZIntersection = minZIntersectionPoint.z();
                 }
             }
         }

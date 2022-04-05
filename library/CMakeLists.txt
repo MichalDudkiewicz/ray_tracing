@@ -13,6 +13,8 @@ add_library(library STATIC
         src/panoramic_camera.cpp
         src/primitive.cpp
         src/triangle.cpp
+        src/mesh.cpp
+        src/obj_parser.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

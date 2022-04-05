@@ -4,12 +4,15 @@
 #include "sphere.hpp"
 #include "surface.hpp"
 #include <vector>
+#include <sstream>
+#include <fstream>
 #include "vector_operators.hpp"
 #include "EasyBMP_BMP.h"
 #include "EasyBMP_DataStructures.h"
 #include "light_intensity.hpp"
 #include "scene.hpp"
 #include "triangle.hpp"
+#include "obj_parser.hpp"
 
 void task1()
 {
@@ -32,24 +35,18 @@ void task1()
 
     //podpunkt 5
     //Prosz� sprawdzi�, czy istnieje przeci�cie sfery S z promieniami R1 oraz R2. Wynik w postaci wsp�rz�dnych punktu przeci�cia nale�y wy�wietli�.
-    std::vector<Vector> intersectionPoints5a = sphere.intersect(r1);
+    std::optional<Vector> intersectionPoint5a = sphere.intersection(r1);
     std::cout << "Podpunkt 5 - R1: \n";
-    if (!intersectionPoints5a.empty())
+    if (intersectionPoint5a.has_value())
     {
-        for (const auto& intersectionPoint : intersectionPoints5a)
-        {
-            std::cout <<intersectionPoint<< '\n';
-        }
+        std::cout <<intersectionPoint5a.value()<< '\n';
     }
 
-    std::vector<Vector> intersectionPoints5b = sphere.intersect(r2);
+    std::optional<Vector> intersectionPoint5b = sphere.intersection(r2);
     std::cout << "Podpunkt 5 - R2: \n";
-    if (!intersectionPoints5b.empty())
+    if (intersectionPoint5b.has_value())
     {
-        for (const auto& intersectionPoint : intersectionPoints5b)
-        {
-            std::cout <<intersectionPoint<< '\n';
-        }
+        std::cout <<intersectionPoint5b.value()<< '\n';
     }
 
     //podpunkt 6
@@ -61,14 +58,11 @@ void task1()
 
     Ray r3(r3origin, r3end, 1000);
 
-    std::vector<Vector> intersectionPoints = sphere.intersect(r3);
+    std::optional<Vector> intersectionPoint = sphere.intersection(r3);
     std::cout << "Podpunkt 6: \n";
-    if (!intersectionPoints.empty())
+    if (intersectionPoint.has_value())
     {
-        for (const auto& intersectionPoint : intersectionPoints)
-        {
-            std::cout <<intersectionPoint<< '\n';
-        }
+        std::cout <<intersectionPoint.value()<< '\n';
     }
 
 
@@ -98,15 +92,46 @@ void task1()
 void task2()
 {
     Scene scene;
-    Sphere sphere({0.0, -0.5, -3.0}, 1.0f);
-    sphere.setColor({1, 0, 0});
-    Sphere sphere2({0.0, 0.5, -5.0}, 1.0f);
-    sphere2.setColor({0, 1, 0});
-    scene.addPrimitive(sphere);
-    scene.addPrimitive(sphere2);
+    const Vector point1(0.0, -0.5, -3.0);
+    auto sphere = std::make_shared<Sphere>(point1, 1.0f);
+    sphere->setColor({1, 0, 0});
+    const Vector point2(0.0, 0.5, -5.0);
+    auto sphere2 = std::make_shared<Sphere>(point2, 1.0f);
+    sphere2->setColor({0, 1, 0});
+    Mesh mesh;
+    mesh.addPrimitive(sphere);
+    mesh.addPrimitive(sphere2);
+    scene.addMesh(mesh);
     scene.camera().setFov(120.0);
     auto image = scene.camera().render();
     image.WriteToFile("rendered_scene.bmp");
+}
+
+void task3()
+{
+    std::string line;
+    std::string obj;
+    std::ifstream objFile("cube.obj");
+    if (objFile.is_open())
+    {
+        std::ostringstream buffer;
+        while (getline(objFile, line))
+        {
+            buffer << line << '\n';
+        }
+        obj = buffer.str();
+        objFile.close();
+    }
+    ObjParser objParser(obj);
+    const auto mesh = objParser.parse();
+
+    Scene scene;
+    scene.addMesh(mesh);
+    Vector surfacePoint1(0.2, 0.2, 1);
+    scene.camera().setPosition(surfacePoint1);
+    scene.camera().setPosition(surfacePoint1);
+    auto image = scene.camera().render();
+    image.WriteToFile("rendered_scene_with_mesh.bmp");
 }
 
 int main() {
@@ -114,17 +139,7 @@ int main() {
 
 //    task2();
 
-    Vector p1(0, 0, 0);
-    Vector p2(10, 0, 0);
-    Vector p3(0, 10, 0);
-    Vector p4(0, 0, 10);
-    Triangle triangle(p1, p2, p3);
-
-    Vector p(5, 5, 0);
-    Ray r3(p, p4, 1000);
-
-    const auto point = triangle.intersection(r3);
-
+    task3();
 
     return 0;
 }
