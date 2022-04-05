@@ -129,7 +129,6 @@ void task3()
     scene.addMesh(mesh);
     Vector surfacePoint1(0.2, 0.2, 1);
     scene.camera().setPosition(surfacePoint1);
-    scene.camera().setPosition(surfacePoint1);
     auto image = scene.camera().render();
     image.WriteToFile("rendered_scene_with_mesh.bmp");
 }

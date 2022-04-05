@@ -14,3 +14,11 @@ void Primitive::setColor(const LightIntensity &color) {
 RGBApixel Primitive::color() const {
     return mColor;
 }
+
+Primitive::Primitive()
+{
+    mColor.Alpha = 255;
+    mColor.Red = 0;
+    mColor.Green = 0;
+    mColor.Blue = 0;
+}

@@ -8,6 +8,9 @@
 
 class Primitive {
 public:
+    Primitive();
+
+public:
     virtual std::optional<Vector> intersection(const Ray &ray) const = 0;
 
     void setColor(const LightIntensity& color);
