@@ -204,10 +204,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                 const auto& minZIntersectionPoint = intersection.value();
                 if (minZIntersectionPoint.z() > minZIntersection)
                 {
-                    color.Red = 255;
-                    color.Green = 0;
-                    color.Blue = 0;
-                    color.Alpha = 255;
+                    color = primitive->color();
                     minZIntersection = minZIntersectionPoint.z();
                 }
             }
