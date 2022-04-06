@@ -7,6 +7,8 @@ class LightIntensity
 public:
     LightIntensity(float r = 0.0, float g = 0.0, float b = 0.0);
 
+    LightIntensity(const LightIntensity& lightIntensity) = default;
+
     float red() const;
     float green() const;
     float blue() const;
@@ -19,6 +21,10 @@ public:
     LightIntensity operator-(const LightIntensity &li) const;
     LightIntensity operator/(float num) const;
     LightIntensity operator*(float num) const;
+    LightIntensity& operator-=(const LightIntensity &li);
+    LightIntensity& operator+=(const LightIntensity &li);
+    LightIntensity& operator*=(float num);
+    LightIntensity& operator/=(float num);
 
     friend LightIntensity operator*(float num, LightIntensity &li);
     friend std::ostream& operator<<(std::ostream& str,

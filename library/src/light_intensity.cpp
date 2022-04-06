@@ -48,7 +48,7 @@ LightIntensity LightIntensity::operator-(const LightIntensity &li) const {
 LightIntensity LightIntensity::operator/(float num) const {
     if (num == 0.0f)
     {
-        throw std::runtime_error("cannot divide by zero");
+        return {0.0f, 0.0f, 0.0f};
     }
     return {mR / num, mG / num, mB / num};
 }
@@ -64,4 +64,24 @@ LightIntensity operator*(float num, LightIntensity &li) {
 std::ostream& operator<<(std::ostream &str, const LightIntensity &li) {
     str << "LightIntensity[" << li.mR << ',' << li.mG << ',' << li.mB << ']';
     return str;
+}
+
+LightIntensity& LightIntensity::operator-=(const LightIntensity &li) {
+    *this = *this - li;
+    return *this;
+}
+
+LightIntensity& LightIntensity::operator+=(const LightIntensity &li) {
+    *this = *this + li;
+    return *this;
+}
+
+LightIntensity &LightIntensity::operator*=(float num) {
+    *this = *this * num;
+    return *this;
+}
+
+LightIntensity &LightIntensity::operator/=(float num) {
+    *this = *this / num;
+    return *this;
 }
