@@ -9,6 +9,11 @@ Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c, const Vect
 
 }
 
+Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c)
+        : mA(a), mB(b), mC(c), mNormal((mB - mA).crossProduct(mC - mA))
+{
+}
+
 std::optional<Vector> Triangle::intersection(const Ray &ray) const {
     Surface triangleSurface(mA, mNormal);
     auto surfaceIntersectionPoint = triangleSurface.intersectionPoint(ray);
