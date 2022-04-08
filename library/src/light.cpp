@@ -5,7 +5,7 @@ LightIntensity Light::diffuse(const IntersectionInfo &iInfo) const {
     auto lightVector = lightDirection(iInfo.position);
     lightVector.normalize();
     const float shade = std::max(0.0f, lightVector.dotProduct(iInfo.normalVector));
-    return mLightIntensity * shade * iInfo.diffuseCoeff;
+    return lightIntensity(iInfo.position) * shade * iInfo.diffuseCoeff;
 }
 
 //LightIntensity Light::specular(const IntersectionInfo& iInfo, const Vector& cameraPosition) const

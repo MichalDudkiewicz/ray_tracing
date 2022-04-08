@@ -15,7 +15,8 @@ public:
 
 private:
     virtual Vector lightDirection(const Vector& position) const = 0;
+    virtual LightIntensity lightIntensity(const Vector& position) const = 0;
 
-private:
+protected:
     LightIntensity mLightIntensity;
 };

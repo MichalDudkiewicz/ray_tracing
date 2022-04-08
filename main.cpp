@@ -111,7 +111,7 @@ void task3()
 {
     std::string line;
     std::string obj;
-    std::ifstream objFile("sphere.obj");
+    std::ifstream objFile("cube_big.obj");
     if (objFile.is_open())
     {
         std::ostringstream buffer;

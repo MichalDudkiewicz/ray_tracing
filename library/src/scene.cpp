@@ -1,6 +1,6 @@
 #include "scene.hpp"
 
-Scene::Scene() : mCamera(*this), mPrimitives(), mLight({1.0, 1.0, 1.0}, {0, 5, 10}) {
+Scene::Scene() : mCamera(*this), mPrimitives(), mLight({1.0, 1.0, 1.0}, {0, 5, 10}, 0.5f, 0.5f) {
 }
 
 Camera& Scene::camera() {
