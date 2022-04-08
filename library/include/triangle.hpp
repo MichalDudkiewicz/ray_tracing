@@ -12,6 +12,8 @@ public:
 
     std::optional<Vector> intersection(const Ray& ray) const override;
 
+    const Vector& normal() const;
+
 private:
     bool isInsideTriangle(const Vector& point) const;
 

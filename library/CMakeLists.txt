@@ -15,6 +15,10 @@ add_library(library STATIC
         src/triangle.cpp
         src/mesh.cpp
         src/obj_parser.cpp
+        src/light.cpp
+        src/point_light.cpp
+        src/directional_light.cpp
+        include/intersection_info.hpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

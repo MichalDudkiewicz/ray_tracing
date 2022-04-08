@@ -94,10 +94,10 @@ void task2()
     Scene scene;
     const Vector point1(0.0, -0.5, -3.0);
     auto sphere = std::make_shared<Sphere>(point1, 1.0f);
-    sphere->setColor({1, 0, 0});
+    sphere->setAmbientLightIntensity({1, 0, 0});
     const Vector point2(0.0, 0.5, -5.0);
     auto sphere2 = std::make_shared<Sphere>(point2, 1.0f);
-    sphere2->setColor({0, 1, 0});
+    sphere2->setAmbientLightIntensity({0, 1, 0});
     Mesh mesh;
     mesh.addPrimitive(sphere);
     mesh.addPrimitive(sphere2);
@@ -111,7 +111,7 @@ void task3()
 {
     std::string line;
     std::string obj;
-    std::ifstream objFile("cube.obj");
+    std::ifstream objFile("sphere.obj");
     if (objFile.is_open())
     {
         std::ostringstream buffer;

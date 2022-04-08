@@ -85,3 +85,16 @@ LightIntensity &LightIntensity::operator/=(float num) {
     *this = *this / num;
     return *this;
 }
+
+RGBApixel LightIntensity::toColor() const {
+    const auto red = (int)(mR * 255);
+    const auto green = (int)(mG * 255);
+    const auto blue = (int)(mB * 255);
+
+    RGBApixel color;
+    color.Red = red;
+    color.Green = green;
+    color.Blue = blue;
+    color.Alpha = 255;
+    return color;
+}

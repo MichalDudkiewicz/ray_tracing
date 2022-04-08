@@ -1,6 +1,6 @@
 #include "scene.hpp"
 
-Scene::Scene() : mCamera(*this), mPrimitives() {
+Scene::Scene() : mCamera(*this), mPrimitives(), mLight({1.0, 1.0, 1.0}, {0, 5, 10}) {
 }
 
 Camera& Scene::camera() {
@@ -13,4 +13,8 @@ void Scene::addMesh(const Mesh &mesh) {
 
 const std::vector<Mesh> &Scene::meshes() const {
     return mMeshes;
+}
+
+const Light &Scene::light() const {
+    return mLight;
 }

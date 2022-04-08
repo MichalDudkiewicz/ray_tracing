@@ -5,6 +5,8 @@
 #include "vector_operators.hpp"
 #include "EasyBMP_BMP.h"
 #include <cmath>
+#include "intersection_info.hpp"
+#include "triangle.hpp"
 
 namespace {
     RGBApixel kBackgroundColor{180, 180, 180, 255};
@@ -204,7 +206,19 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                 const auto& minZIntersectionPoint = intersection.value();
                 if (minZIntersectionPoint.z() > minZIntersection)
                 {
-                    color = primitive->color();
+                    const auto ambientLightIntensity = primitive->ambientLightIntensity();
+
+                    IntersectionInfo intersectionInfo;
+                    intersectionInfo.position = minZIntersectionPoint;
+                    intersectionInfo.diffuseCoeff = 0.1;
+                    const auto triangle = std::dynamic_pointer_cast<Triangle>(primitive);
+                    intersectionInfo.normalVector = triangle->normal();
+                    const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
+                    const auto accumulatedLightIntensity = ambientLightIntensity + diffuseLightIntensity;
+                    color = accumulatedLightIntensity.toColor();
+//                    color.Blue = 255;
+//                    color.Green = 0;
+//                    color.Red = 0;
                     minZIntersection = minZIntersectionPoint.z();
                 }
             }

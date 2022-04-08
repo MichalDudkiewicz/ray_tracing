@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include "EasyBMP_DataStructures.h"
 
 class LightIntensity
 {
@@ -29,6 +30,8 @@ public:
     friend LightIntensity operator*(float num, LightIntensity &li);
     friend std::ostream& operator<<(std::ostream& str,
                                     const LightIntensity &li);
+
+    RGBApixel toColor() const;
 
 private:
     float mR, mG, mB;
