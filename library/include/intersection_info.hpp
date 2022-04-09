@@ -1,11 +1,20 @@
 #pragma once
 #include "vector.hpp"
 #include "light_intensity.hpp"
+#include "material.hpp"
 
-struct IntersectionInfo
+class IntersectionInfo
 {
-    Vector position;
-    Vector normalVector;
-    float diffuseCoeff;
-    float specularCoeff;
+public:
+    explicit IntersectionInfo(const Material& material, const Vector& position, const Vector& normal);
+
+    const Vector& position() const;
+    const Vector& normal() const;
+    const Material& material() const;
+
+private:
+    Material mMaterial;
+    Vector mPosition;
+    Vector mNormal;
 };
+

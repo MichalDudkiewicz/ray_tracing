@@ -1,10 +1,9 @@
 #include "primitive.hpp"
 
-
-void Primitive::setAmbientLightIntensity(const LightIntensity &ambientLightIntensity) {
-    mAmbientLightIntensity = ambientLightIntensity;
+const Material &Primitive::material() const {
+    return *mMaterial;
 }
 
-const LightIntensity& Primitive::ambientLightIntensity() const {
-    return mAmbientLightIntensity;
+void Primitive::setMaterial(const std::shared_ptr<Material> &material) {
+    mMaterial = material;
 }

@@ -18,7 +18,8 @@ add_library(library STATIC
         src/light.cpp
         src/point_light.cpp
         src/directional_light.cpp
-        include/intersection_info.hpp
+        src/intersection_info.cpp
+        src/material.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

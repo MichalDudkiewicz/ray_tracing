@@ -91,20 +91,20 @@ void task1()
 
 void task2()
 {
-    Scene scene;
-    const Vector point1(0.0, -0.5, -3.0);
-    auto sphere = std::make_shared<Sphere>(point1, 1.0f);
-    sphere->setAmbientLightIntensity({1, 0, 0});
-    const Vector point2(0.0, 0.5, -5.0);
-    auto sphere2 = std::make_shared<Sphere>(point2, 1.0f);
-    sphere2->setAmbientLightIntensity({0, 1, 0});
-    Mesh mesh;
-    mesh.addPrimitive(sphere);
-    mesh.addPrimitive(sphere2);
-    scene.addMesh(mesh);
-    scene.camera().setFov(120.0);
-    auto image = scene.camera().render();
-    image.WriteToFile("rendered_scene.bmp");
+//    Scene scene;
+//    const Vector point1(0.0, -0.5, -3.0);
+//    auto sphere = std::make_shared<Sphere>(point1, 1.0f);
+//    sphere->setAmbientLightIntensity({1, 0, 0});
+//    const Vector point2(0.0, 0.5, -5.0);
+//    auto sphere2 = std::make_shared<Sphere>(point2, 1.0f);
+//    sphere2->setAmbientLightIntensity({0, 1, 0});
+//    Mesh mesh;
+//    mesh.addPrimitive(sphere);
+//    mesh.addPrimitive(sphere2);
+//    scene.addMesh(mesh);
+//    scene.camera().setFov(120.0);
+//    auto image = scene.camera().render();
+//    image.WriteToFile("rendered_scene.bmp");
 }
 
 void task3()
