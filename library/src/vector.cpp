@@ -113,4 +113,8 @@ Vector Vector::lerp(const Vector &other, const float t) const {
     return {mX + t * (other.mX - mX), mY + t * (other.mY - mY), mZ + t * (other.mZ - mZ)};
 }
 
+bool Vector::operator==(const Vector &other) const {
+    return mX == other.mX && mY == other.mY && mZ == other.mZ;
+}
+
 

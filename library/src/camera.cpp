@@ -207,13 +207,37 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                 if (minZIntersectionPoint.z() > minZIntersection)
                 {
                     const auto ambientLightIntensity = primitive->material().lightIntensity();
+                    auto accumulatedLightIntensity = ambientLightIntensity;
 
                     const auto triangle = std::dynamic_pointer_cast<Triangle>(primitive);
                     IntersectionInfo intersectionInfo(primitive->material(), minZIntersectionPoint, triangle->normal());
 
-                    const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
-                    const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
-                    const auto accumulatedLightIntensity = ambientLightIntensity + diffuseLightIntensity + specularLightIntensity;
+                    const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
+                    const Ray reflectionRay(intersectionInfo.position(), reflectionDir, 1000.0f);
+                    bool isInShadow = false;
+                    for (const auto& mesh2 : mScene.meshes())
+                    {
+                        for (const auto& primitive2 : mesh2.primitives())
+                        {
+                            const auto triangle2 = std::dynamic_pointer_cast<Triangle>(primitive2);
+                            if (*triangle != *triangle2)
+                            {
+                                const auto intersection2 = primitive2->intersection(reflectionRay);
+                                if (intersection2.has_value())
+                                {
+                                    isInShadow = true;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (!isInShadow)
+                    {
+                        const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
+                        const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
+                        accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
+                    }
+
                     color = accumulatedLightIntensity.toColor();
 //                    color.Blue = 255;
 //                    color.Green = 0;

@@ -59,3 +59,11 @@ bool Triangle::isInsideTriangle(const Vector &point) const {
 const Vector &Triangle::normal() const {
     return mNormal;
 }
+
+bool Triangle::operator==(const Triangle &other) const {
+    return mNormal == other.mNormal && mA == other.mA && mB == other.mB && mC == other.mC;
+}
+
+bool Triangle::operator!=(const Triangle &other) const {
+    return !(*this==other);
+}

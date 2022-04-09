@@ -14,8 +14,10 @@ public:
 
     LightIntensity specular(const IntersectionInfo& iInfo, const Ray& ray) const;
 
-private:
+public:
     virtual Vector lightDirection(const Vector& position) const = 0;
+
+private:
     virtual LightIntensity lightIntensity(const Vector& position) const = 0;
 
 protected:

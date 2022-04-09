@@ -123,11 +123,20 @@ void task3()
         objFile.close();
     }
     ObjParser objParser(obj);
-    const auto mesh = objParser.parse();
+    const auto mesh1 = objParser.parse();
+    Mesh mesh2;
+    Vector A(1, 0, 0.7);
+    Vector B(1, 1, 0.7);
+    Vector C(0, 0, 0.7);
+    std::shared_ptr<Triangle> triangle = std::make_shared<Triangle>(A, B, C);
+    const std::shared_ptr<Material> material = std::make_shared<Material>();
+    triangle->setMaterial(material);
+    mesh2.addPrimitive(triangle);
 
     Scene scene;
-    scene.addMesh(mesh);
-    Vector surfacePoint1(0.6, 0.7,1.5);
+    scene.addMesh(mesh1);
+    scene.addMesh(mesh2);
+    Vector surfacePoint1(-0.2, 0.7,1.5);
     scene.camera().setPosition(surfacePoint1);
     auto image = scene.camera().render();
     image.WriteToFile("rendered_scene_with_mesh.bmp");

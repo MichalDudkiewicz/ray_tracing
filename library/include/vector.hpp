@@ -33,6 +33,8 @@ public:
     Vector reflect(const Vector& normal) const;
     Vector lerp(const Vector& other, float t) const;
 
+    bool operator==(const Vector& other) const;
+
 private:
     float mX;
     float mY;

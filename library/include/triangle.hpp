@@ -14,6 +14,9 @@ public:
 
     const Vector& normal() const;
 
+    bool operator==(const Triangle& other) const;
+    bool operator!=(const Triangle& other) const;
+
 private:
     bool isInsideTriangle(const Vector& point) const;
 

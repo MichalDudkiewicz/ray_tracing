@@ -23,7 +23,7 @@ std::optional<Vector> Surface::intersectionPoint(const Ray &ray) const {
     V.negate();
     const auto nDotV = mNormal.dotProduct(V);
     // ray is parallel to surface or ray intersects surface before its start point
-    if (nDotV >= 1e-6) {
+    if (nDotV != 0) {
 //        Vector p0l0 = ray.origin() - mPoint;
 //        const auto a = p0l0.dotProduct(mNormal) / nDotV;
         const auto a = (t - mNormal.dotProduct(ray.origin())) / nDotV;
