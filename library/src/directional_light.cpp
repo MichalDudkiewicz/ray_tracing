@@ -4,8 +4,12 @@ Vector DirectionalLight::lightDirection(const Vector &/*position*/) const {
     return mDirection;
 }
 
-DirectionalLight::DirectionalLight(const LightIntensity &lightIntensity, const Vector &direction)
-: Light(lightIntensity), mDirection(direction)
+DirectionalLight::DirectionalLight(const LightIntensity &lightIntensity, const Vector &direction, float shininess)
+: Light(lightIntensity, shininess), mDirection(direction)
 {
 
+}
+
+LightIntensity DirectionalLight::lightIntensity(const Vector &/*position*/) const {
+    return mLightIntensity;
 }

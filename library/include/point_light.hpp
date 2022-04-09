@@ -4,7 +4,7 @@
 
 class PointLight : public Light {
 public:
-    PointLight(const LightIntensity& lightIntensity, const Vector& position, float a1 = 1.0f, float a2 = 0.0f, float flashCoeff = 2.0f);
+    PointLight(const LightIntensity& lightIntensity, const Vector& position, float flashCoeff = 2.0f, float a1 = 1.0f, float a2 = 0.0f);
 
 public:
     Vector lightDirection(const Vector &position) const override;

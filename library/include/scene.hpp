@@ -5,6 +5,7 @@
 #include "panoramic_camera.hpp"
 #include "mesh.hpp"
 #include "point_light.hpp"
+#include "directional_light.hpp"
 #include <memory>
 
 class Scene {
@@ -12,8 +13,6 @@ public:
     Scene();
 
     Camera& camera();
-
-    void addPrimitive(const Sphere& sphere);
 
     void addMesh(const Mesh& mesh);
 
@@ -25,7 +24,6 @@ public:
 
 private:
     PanoramicCamera mCamera;
-    std::vector<Sphere> mPrimitives;
     std::vector<Mesh> mMeshes;
     PointLight mLight;
 };
