@@ -11,7 +11,7 @@ ObjParser::ObjParser(std::string objString) : mObjString(std::move(objString))
 }
 
 Mesh ObjParser::parse() {
-    LightIntensity customLI(1.0f, 0.0f, 0.0f);
+    LightIntensity customLI(0.0f, 0.0f, 0.0f);
     const auto customMaterial = std::make_shared<Material>(customLI, 0.5f, 0.5f);
     Mesh mesh;
     std::vector<Vector> vertexes;

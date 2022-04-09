@@ -110,7 +110,7 @@ void Camera::dividePixel(const Vector& center, float width, float height, int& r
     }
 }
 
-Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, -1), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0), mFov(100.0f) {
+Camera::Camera(Scene& scene) : mScene(scene), mPosition(0, 0, 0), mTarget(0, 0, -0.001), mNearPlane(1), mFarPlane(1000), mUp(0, 1, 0), mFov(100.0f) {
 }
 
 Camera::Camera(Scene& scene, const Vector &position, const Vector &target)
