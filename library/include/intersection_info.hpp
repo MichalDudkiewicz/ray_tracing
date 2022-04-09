@@ -7,4 +7,5 @@ struct IntersectionInfo
     Vector position;
     Vector normalVector;
     float diffuseCoeff;
+    float specularCoeff;
 };

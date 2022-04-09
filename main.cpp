@@ -111,7 +111,7 @@ void task3()
 {
     std::string line;
     std::string obj;
-    std::ifstream objFile("cube_big.obj");
+    std::ifstream objFile("cube2.obj");
     if (objFile.is_open())
     {
         std::ostringstream buffer;
@@ -127,7 +127,7 @@ void task3()
 
     Scene scene;
     scene.addMesh(mesh);
-    Vector surfacePoint1(0.2, 0.2, 1);
+    Vector surfacePoint1(0, 1, 3);
     scene.camera().setPosition(surfacePoint1);
     auto image = scene.camera().render();
     image.WriteToFile("rendered_scene_with_mesh.bmp");

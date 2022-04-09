@@ -35,4 +35,5 @@ public:
 
 private:
     float mR, mG, mB;
+
 };

@@ -4,8 +4,8 @@ Vector PointLight::lightDirection(const Vector &position) const {
     return mPosition - position;
 }
 
-PointLight::PointLight(const LightIntensity &lightIntensity, const Vector &position, float a1, float a2)
-: Light(lightIntensity), mPosition(position), mA1(a1), mA2(a2)
+PointLight::PointLight(const LightIntensity &lightIntensity, const Vector &position, float a1, float a2, float flashCoeff)
+: Light(lightIntensity, flashCoeff), mPosition(position), mA1(a1), mA2(a2)
 {
 
 }

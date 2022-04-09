@@ -21,7 +21,7 @@ std::optional<Vector> Surface::intersectionPoint(const Ray &ray) const {
     const auto t = shift();
     const auto nDotV = mNormal.dotProduct(ray.direction());
     // ray is parallel to surface or ray intersects surface before its start point
-    if (nDotV == 0.0f || ((t - mNormal.dotProduct(ray.origin())) / nDotV) < 0.0f)
+    if (nDotV == 0.0f || t < 0.0f)
     {
         return std::nullopt;
     }

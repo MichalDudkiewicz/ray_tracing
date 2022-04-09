@@ -210,11 +210,14 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
 
                     IntersectionInfo intersectionInfo;
                     intersectionInfo.position = minZIntersectionPoint;
-                    intersectionInfo.diffuseCoeff = 0.1;
+                    intersectionInfo.diffuseCoeff = 0.1f;
+                    intersectionInfo.specularCoeff = 1.0f;
                     const auto triangle = std::dynamic_pointer_cast<Triangle>(primitive);
                     intersectionInfo.normalVector = triangle->normal();
+
                     const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
-                    const auto accumulatedLightIntensity = ambientLightIntensity + diffuseLightIntensity;
+                    const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
+                    const auto accumulatedLightIntensity = ambientLightIntensity + diffuseLightIntensity + specularLightIntensity;
                     color = accumulatedLightIntensity.toColor();
 //                    color.Blue = 255;
 //                    color.Green = 0;

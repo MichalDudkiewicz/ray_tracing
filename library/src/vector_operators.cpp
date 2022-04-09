@@ -15,5 +15,5 @@ std::ostream& operator<<(std::ostream& os, const Vector& vector)
 
 float angleBetween(const Vector& v1, const Vector& v2)
 {
-    return asinf(v1.crossProduct(v2).length() / (v1.length() * v2.length()));
+    return asinf(v1.crossProduct(v2).length() / (v1.length() * v2.length())) * 180/M_PI;
 }
