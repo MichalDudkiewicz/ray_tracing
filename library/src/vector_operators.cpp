@@ -1,6 +1,9 @@
+#define _USE_MATH_DEFINES
+
 #include "vector_operators.hpp"
 
 #include <cmath>
+
 
 Vector operator*(const float scalar, const Vector& vector)
 {
