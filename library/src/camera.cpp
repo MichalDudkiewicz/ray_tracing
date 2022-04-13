@@ -237,6 +237,11 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                         const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
                         accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
                     }
+                    else
+                    {
+                        const LightIntensity shadowLightIntensity(0.5, 0.5, 0.5);
+                        accumulatedLightIntensity -= shadowLightIntensity;
+                    }
 
                     color = accumulatedLightIntensity.toColor();
 //                    color.Blue = 255;
