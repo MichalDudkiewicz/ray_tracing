@@ -209,25 +209,21 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                     const auto ambientLightIntensity = primitive->material().lightIntensity();
                     auto accumulatedLightIntensity = ambientLightIntensity;
 
-                    const auto triangle = std::dynamic_pointer_cast<Triangle>(primitive);
-                    IntersectionInfo intersectionInfo(primitive->material(), minZIntersectionPoint, triangle->normal());
+                    IntersectionInfo intersectionInfo(primitive->material(), minZIntersectionPoint, primitive->normal(minZIntersectionPoint));
 
                     const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
-                    const Ray reflectionRay(intersectionInfo.position(), reflectionDir, 1000.0f);
+                    const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
+                    Ray reflectionRay(beforeIntersectionPoint, reflectionDir, 1000.0f);
                     bool isInShadow = false;
                     for (const auto& mesh2 : mScene.meshes())
                     {
                         for (const auto& primitive2 : mesh2.primitives())
                         {
-                            const auto triangle2 = std::dynamic_pointer_cast<Triangle>(primitive2);
-                            if (*triangle != *triangle2)
+                            const auto intersection2 = primitive2->intersection(reflectionRay);
+                            if (intersection2.has_value())
                             {
-                                const auto intersection2 = primitive2->intersection(reflectionRay);
-                                if (intersection2.has_value())
-                                {
-                                    isInShadow = true;
-                                    break;
-                                }
+                                isInShadow = true;
+                                break;
                             }
                         }
                     }

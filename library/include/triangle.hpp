@@ -12,7 +12,7 @@ public:
 
     std::optional<Vector> intersection(const Ray& ray) const override;
 
-    const Vector& normal() const;
+    Vector normal(const Vector& intersectionPoint) const override;
 
     bool operator==(const Triangle& other) const;
     bool operator!=(const Triangle& other) const;

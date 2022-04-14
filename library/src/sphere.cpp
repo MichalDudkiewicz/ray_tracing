@@ -1,6 +1,7 @@
 #include "sphere.hpp"
 #include <cmath>
 #include <vector>
+#include <iomanip>
 #include "vector_operators.hpp"
 
 Sphere::Sphere(const Vector &center, float radius) : mCenter(center), mRadius(radius) {
@@ -19,6 +20,12 @@ bool Sphere::isOnSurface(const Vector &point) const {
     return (pointOriginDiff.dotProduct(pointOriginDiff) - powf(mRadius, 2.0f)) == 0.0f;
 }
 
+float round(float var)
+{
+    int value = (int)(var * 1000 + .5);
+    return (float)value / 1000;
+}
+
 std::optional<Vector> Sphere::intersection(const Ray &ray) const {
     const float dist = ray.distance();
     Vector v = ray.origin() - mCenter;
@@ -30,7 +37,9 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
     if (delta > 0) {
         const auto det = sqrtf(delta);
         float i1 = (b - det) / a;
+        i1 = round(i1);
         float i2 = (b + det) / a;
+        i2 = round(i2);
         std::vector<Vector> intersections;
         if (i2 >= 0 && i2 <= dist)
         {
@@ -42,13 +51,16 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
             Vector intersectionPoint = ray.origin() + i1 * ray.direction();
             intersections.push_back(intersectionPoint);
         }
-        if (intersections[0].z() > intersections[1].z())
+        if (intersections.size() == 2)
         {
-            intersectionPointOpt = intersections[0];
-        }
-        else
-        {
-            intersectionPointOpt = intersections[1];
+            if (intersections[0].z() > intersections[1].z())
+            {
+                intersectionPointOpt = intersections[0];
+            }
+            else
+            {
+                intersectionPointOpt = intersections[1];
+            }
         }
     }
     else if (delta == 0)
@@ -61,4 +73,11 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
         }
     }
     return intersectionPointOpt;
+}
+
+Vector Sphere::normal(const Vector& intersectionPoint) const {
+    Vector normal(mCenter - intersectionPoint);
+    normal = normal.normalize();
+    normal.negate();
+    return normal;
 }

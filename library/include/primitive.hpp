@@ -13,6 +13,8 @@ public:
 
     void setMaterial(const std::shared_ptr<Material> &material);
 
+    virtual Vector normal(const Vector& intersectionPoint) const = 0;
+
     const Material& material() const;
 
 private:

@@ -56,7 +56,7 @@ bool Triangle::isInsideTriangle(const Vector &point) const {
     }
 }
 
-const Vector &Triangle::normal() const {
+Vector Triangle::normal(const Vector& /*intersectionPoint*/) const {
     return mNormal;
 }
 

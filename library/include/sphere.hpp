@@ -12,6 +12,8 @@ public:
     const Vector& center() const;
     float radius() const;
 
+    Vector normal(const Vector& intersectionPoint) const override;
+
     bool isOnSurface(const Vector& point) const;
     std::optional<Vector> intersection(const Ray& ray) const override;
 
