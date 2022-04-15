@@ -7,7 +7,7 @@
 
 class Light {
 public:
-    Light(const LightIntensity& lightIntensity, float flashCoefficient = 2.0f);
+    explicit Light(const LightIntensity& lightIntensity);
 
 public:
     LightIntensity diffuse(const IntersectionInfo& iInfo) const;
@@ -22,5 +22,4 @@ private:
 
 protected:
     LightIntensity mLightIntensity;
-    float mFlashCoefficient;
 };

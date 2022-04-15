@@ -130,13 +130,14 @@ void task3()
     Vector C(0, 0, 0.7);
     std::shared_ptr<Triangle> triangle = std::make_shared<Triangle>(A, B, C);
     LightIntensity blue(0.0f, 0.0f, 1.0f);
-    const std::shared_ptr<Material> material = std::make_shared<Material>(blue, 0.8f, 0.2f);
-    triangle->setMaterial(material);
+    const LightIntensity diffuse(0.8f, 0.8f, 0.8f);
+    const LightIntensity specular(0.2f, 0.2f, 0.2f);
+    const std::shared_ptr<Material> material = std::make_shared<Material>("", blue, diffuse, specular, 0.5f);
     mesh2.addPrimitive(triangle);
 
     Vector centerSphere(-0.5, 0, 0);
     std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(centerSphere, 0.3f);
-    sphere->setMaterial(material);
+    mesh2.setMaterial(material);
     mesh2.addPrimitive(sphere);
 
     Scene scene;

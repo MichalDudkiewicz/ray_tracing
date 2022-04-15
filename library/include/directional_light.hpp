@@ -4,7 +4,7 @@
 
 class DirectionalLight : public Light {
 public:
-    DirectionalLight(const LightIntensity& lightIntensity, const Vector& direction, float shininess = 2.0f);
+    DirectionalLight(const LightIntensity& lightIntensity, const Vector& direction);
 
 public:
     Vector lightDirection(const Vector &position) const override;

@@ -168,84 +168,48 @@ BMP Camera::render() const {
 }
 
 RGBApixel Camera::getColorByPosition(const Vector& position) const {
-    float minZIntersection = -mFarPlane;
     RGBApixel color = kBackgroundColor;
     const Ray ray = createRay(position.x(), position.y());
-//    for (const auto& primitive : mScene.primitives())
-//    {
-//        const auto intersection = primitive.intersect(ray);
-//        if (!intersection.empty())
-//        {
-//            const auto& minZIntersectionPoint = intersection.front();
-//            if (minZIntersectionPoint.z() > minZIntersection)
-//            {
-//                color = primitive.color();
-//                minZIntersection = minZIntersectionPoint.z();
-//            }
-//            if (intersection.size() > 1)
-//            {
-//                for (int k = 1; k < intersection.size(); k++)
-//                {
-//                    if (intersection[k].z() > minZIntersection)
-//                    {
-//                        color = primitive.color();
-//                        minZIntersection = intersection[k].z();
-//                    }
-//                }
-//            }
-//        }
-//    }
 
     for (const auto& mesh : mScene.meshes())
     {
-        for (const auto& primitive : mesh.primitives())
+        const auto intersection = mesh.intersection(ray);
+        if (intersection.has_value())
         {
-            const auto intersection = primitive->intersection(ray);
-            if (intersection.has_value())
+            const auto ambientLightIntensity = mesh.material().ambientLight();
+            auto accumulatedLightIntensity = ambientLightIntensity;
+
+            IntersectionInfo intersectionInfo(mesh.material(), intersection.value().first, intersection.value().second);
+
+            const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
+            const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
+            Ray reflectionRay(beforeIntersectionPoint, reflectionDir, 1000.0f);
+            bool isInShadow = false;
+            for (const auto& mesh2 : mScene.meshes())
             {
-                const auto& minZIntersectionPoint = intersection.value();
-                if (minZIntersectionPoint.z() > minZIntersection)
+                for (const auto& primitive2 : mesh2.primitives())
                 {
-                    const auto ambientLightIntensity = primitive->material().lightIntensity();
-                    auto accumulatedLightIntensity = ambientLightIntensity;
-
-                    IntersectionInfo intersectionInfo(primitive->material(), minZIntersectionPoint, primitive->normal(minZIntersectionPoint));
-
-                    const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
-                    const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
-                    Ray reflectionRay(beforeIntersectionPoint, reflectionDir, 1000.0f);
-                    bool isInShadow = false;
-                    for (const auto& mesh2 : mScene.meshes())
+                    const auto intersection2 = primitive2->intersection(reflectionRay);
+                    if (intersection2.has_value())
                     {
-                        for (const auto& primitive2 : mesh2.primitives())
-                        {
-                            const auto intersection2 = primitive2->intersection(reflectionRay);
-                            if (intersection2.has_value())
-                            {
-                                isInShadow = true;
-                                break;
-                            }
-                        }
+                        isInShadow = true;
+                        break;
                     }
-                    if (!isInShadow)
-                    {
-                        const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
-                        const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
-                        accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
-                    }
-                    else
-                    {
-                        const LightIntensity shadowLightIntensity(0.5, 0.5, 0.5);
-                        accumulatedLightIntensity -= shadowLightIntensity;
-                    }
-
-                    color = accumulatedLightIntensity.toColor();
-//                    color.Blue = 255;
-//                    color.Green = 0;
-//                    color.Red = 0;
-                    minZIntersection = minZIntersectionPoint.z();
                 }
             }
+            if (!isInShadow)
+            {
+                const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
+                const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
+                accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
+            }
+            else
+            {
+                const LightIntensity shadowLightIntensity(0.5, 0.5, 0.5);
+                accumulatedLightIntensity -= shadowLightIntensity;
+            }
+
+            color = accumulatedLightIntensity.toColor();
         }
     }
     return color;

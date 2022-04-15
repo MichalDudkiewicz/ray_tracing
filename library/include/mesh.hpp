@@ -15,7 +15,14 @@ public:
 
     const std::string& groupName() const;
 
+    std::optional<std::pair<Vector, Vector>> intersection(const Ray &ray) const;
+
+    const Material& material() const;
+
+    void setMaterial(const std::shared_ptr<Material> &material);
+
 private:
     std::vector<std::shared_ptr<Primitive>> mPrimitives;
     std::string mGroupName;
+    std::shared_ptr<Material> mMaterial;
 };

@@ -3,20 +3,21 @@
 #include "triangle.hpp"
 #include <algorithm>
 #include <sstream>
+#include <fstream>
 #include "material.hpp"
+#include "mtl_parser.hpp"
 
 ObjParser::ObjParser(std::string objString) : mObjString(std::move(objString))
 {
 
 }
 
-Mesh ObjParser::parse() {
-    LightIntensity customLI(1.0f, 0.0f, 0.0f);
-    const auto customMaterial = std::make_shared<Material>(customLI, 0.5f, 0.5f);
+Mesh ObjParser::parse() const {
     Mesh mesh;
     std::vector<Vector> vertexes;
     std::vector<Vector> normals;
     std::istringstream stream(mObjString);
+    std::unique_ptr<MtlParser> mtlParser;
     std::string line;
     while(getline(stream, line))
     {
@@ -24,9 +25,9 @@ Mesh ObjParser::parse() {
         {
             continue;
         }
-        std::string lineTitle = line.substr(0, 2);
+        std::string lineTitle = line.substr(0, line.find(' '));
         lineTitle.erase(remove_if(lineTitle.begin(), lineTitle.end(), isspace), lineTitle.end());
-        std::string values = line.substr(2);
+        std::string values = line.substr(line.find(' '));
         std::vector<std::string> numberStringValues;
         std::string temp;
         for(const char value : values){
@@ -89,10 +90,31 @@ Mesh ObjParser::parse() {
             if (intValues.size() >= 3)
             {
                 auto triangle = std::make_shared<Triangle>(vertexes[intValues[0]], vertexes[intValues[1]], vertexes[intValues[2]], normals[normalIndex]);
-                triangle->setMaterial(customMaterial);
                 mesh.addPrimitive(triangle);
             }
         }
+        else if (lineTitle == "usemtl")
+        {
+            std::string mtlLine;
+            std::string mtl;
+            std::ifstream mtlFile(numberStringValues.front() + ".mtl");
+            if (mtlFile.is_open())
+            {
+                std::ostringstream buffer;
+                while (getline(mtlFile, mtlLine))
+                {
+                    buffer << mtlLine << '\n';
+                }
+                mtl = buffer.str();
+                mtlFile.close();
+            }
+            mtlParser = std::make_unique<MtlParser>(mtl);
+        }
+    }
+    if (mtlParser)
+    {
+        const auto material = mtlParser->parse();
+        mesh.setMaterial(material);
     }
     return mesh;
 }

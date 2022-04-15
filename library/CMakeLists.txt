@@ -11,7 +11,6 @@ add_library(library STATIC
         src/scene.cpp
         src/orthographic_camera.cpp
         src/panoramic_camera.cpp
-        src/primitive.cpp
         src/triangle.cpp
         src/mesh.cpp
         src/obj_parser.cpp
@@ -20,6 +19,9 @@ add_library(library STATIC
         src/directional_light.cpp
         src/intersection_info.cpp
         src/material.cpp
+        src/mtl_parser.cpp
+
+        include/primitive.hpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

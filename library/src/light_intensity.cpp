@@ -98,3 +98,24 @@ RGBApixel LightIntensity::toColor() const {
     color.Alpha = 255;
     return color;
 }
+
+LightIntensity LightIntensity::operator*(const LightIntensity &li) const {
+    return {mR * li.mR, mG * li.mG, mB * li.mB};
+}
+
+LightIntensity LightIntensity::operator/(const LightIntensity &li) const {
+    const float newR = li.mR == 0.0f ? 1.0f : mR / li.mR;
+    const float newG = li.mG == 0.0f ? 1.0f : mG / li.mG;
+    const float newB = li.mB == 0.0f ? 1.0f : mB / li.mB;
+    return {newR, newG, newB};
+}
+
+LightIntensity &LightIntensity::operator*=(const LightIntensity &li) {
+    *this = *this * li;
+    return *this;
+}
+
+LightIntensity &LightIntensity::operator/=(const LightIntensity &li) {
+    *this = *this / li;
+    return *this;
+}

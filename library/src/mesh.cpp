@@ -18,3 +18,30 @@ Mesh::Mesh(std::string groupName) : mGroupName(std::move(groupName))
 {
 
 }
+
+std::optional<std::pair<Vector, Vector>> Mesh::intersection(const Ray &ray) const {
+    float minZIntersection = (ray.origin() + ray.direction()*ray.distance()).z();
+    std::optional<std::pair<Vector, Vector>> intersectionData;
+    for (const auto& primitive : mPrimitives)
+    {
+        const auto intersection = primitive->intersection(ray);
+        if (intersection.has_value())
+        {
+            const auto& minZIntersectionPoint = intersection.value();
+            if (minZIntersectionPoint.z() > minZIntersection)
+            {
+                intersectionData = std::make_pair(minZIntersectionPoint, primitive->normal(minZIntersectionPoint));
+                minZIntersection = minZIntersectionPoint.z();
+            }
+        }
+    }
+    return intersectionData;
+}
+
+const Material &Mesh::material() const {
+    return *mMaterial;
+}
+
+void Mesh::setMaterial(const std::shared_ptr<Material> &material) {
+    mMaterial = material;
+}

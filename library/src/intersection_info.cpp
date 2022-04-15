@@ -1,7 +1,7 @@
 #include "intersection_info.hpp"
 
-IntersectionInfo::IntersectionInfo(const Material &material, const Vector &position, const Vector &normal)
-: mMaterial(material), mPosition(position), mNormal(normal)
+IntersectionInfo::IntersectionInfo(Material material, const Vector &position, const Vector &normal)
+: mMaterial(std::move(material)), mPosition(position), mNormal(normal)
 {
 
 }

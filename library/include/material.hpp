@@ -3,17 +3,30 @@
 
 class Material {
 public:
-    Material(const LightIntensity& lightIntensity = {}, float diffuseCoeff = 0.0f, float specularCoeff = 0.0f);
+    Material(std::string name = "", LightIntensity ambientLight = {}, LightIntensity diffuseLight = {}, LightIntensity specularLight = {}, float shininess = 0.0f);
 
-    const LightIntensity& lightIntensity() const;
+    void setName(const std::string& name);
 
-    float diffuseCoeff() const;
+    void setAmbientLight(const LightIntensity& ambientIntensity);
+    void setSpecularLight(const LightIntensity& specularIntensity);
+    void setDiffuseLight(const LightIntensity& diffuseIntensity);
+    void setShininess(float shininess);
 
-    float specularCoeff() const;
+    const LightIntensity& ambientLight() const;
+
+    const LightIntensity& diffuseLight() const;
+
+    const LightIntensity& specularLight() const;
+
+    float shininess() const;
+
+    const std::string& name() const;
 
 private:
-    LightIntensity mLightIntensity;
-    float mDiffuseCoeff;
-    float mSpecularCoeff;
+    std::string mName;
+    LightIntensity mAmbientLight;
+    LightIntensity mDiffuseLight;
+    LightIntensity mSpecularLight;
+    float mShininess;
 };
 

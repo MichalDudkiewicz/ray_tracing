@@ -7,7 +7,7 @@ class ObjParser {
 public:
     explicit ObjParser(std::string objString);
 
-    Mesh parse();
+    Mesh parse() const;
 private:
     std::string mObjString;
 };

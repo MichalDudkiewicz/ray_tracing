@@ -24,6 +24,10 @@ public:
     LightIntensity operator*(float num) const;
     LightIntensity& operator-=(const LightIntensity &li);
     LightIntensity& operator+=(const LightIntensity &li);
+    LightIntensity operator*(const LightIntensity &li) const;
+    LightIntensity operator/(const LightIntensity &li) const;
+    LightIntensity& operator*=(const LightIntensity &li);
+    LightIntensity& operator/=(const LightIntensity &li);
     LightIntensity& operator*=(float num);
     LightIntensity& operator/=(float num);
 

@@ -11,13 +11,6 @@ class Primitive {
 public:
     virtual std::optional<Vector> intersection(const Ray &ray) const = 0;
 
-    void setMaterial(const std::shared_ptr<Material> &material);
-
     virtual Vector normal(const Vector& intersectionPoint) const = 0;
-
-    const Material& material() const;
-
-private:
-    std::shared_ptr<Material> mMaterial;
 };
 

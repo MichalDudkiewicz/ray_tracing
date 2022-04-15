@@ -6,7 +6,7 @@
 class IntersectionInfo
 {
 public:
-    explicit IntersectionInfo(const Material& material, const Vector& position, const Vector& normal);
+    explicit IntersectionInfo(Material material, const Vector& position, const Vector& normal);
 
     const Vector& position() const;
     const Vector& normal() const;
