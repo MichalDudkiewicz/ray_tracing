@@ -92,6 +92,12 @@ std::shared_ptr<Material> MtlParser::parse() const {
         {
             material->setShininess(std::stof(numberStringValues.front()));
         }
+        else if (lineTitle == "map" || lineTitle == "map_Ka" || lineTitle == "map_Kd" || lineTitle == "map_Ks")
+        {
+            const auto texture = std::make_shared<BMP>();
+            texture->ReadFromFile(numberStringValues.front().c_str());
+            material->setTexture(texture);
+        }
     }
     return material;
 }

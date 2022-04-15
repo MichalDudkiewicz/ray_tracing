@@ -45,3 +45,11 @@ void Material::setShininess(float shininess) {
 float Material::shininess() const {
     return mShininess;
 }
+
+void Material::setTexture(std::shared_ptr<BMP> texture) {
+    mTexture = std::move(texture);
+}
+
+const BMP &Material::texture() const {
+    return *mTexture;
+}
