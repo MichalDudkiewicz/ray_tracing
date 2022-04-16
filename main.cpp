@@ -109,44 +109,27 @@ void task2()
 
 void task3()
 {
-    std::string line;
-    std::string obj;
-    std::ifstream objFile("cube2.obj");
-    if (objFile.is_open())
-    {
-        std::ostringstream buffer;
-        while (getline(objFile, line))
-        {
-            buffer << line << '\n';
-        }
-        obj = buffer.str();
-        objFile.close();
-    }
-    ObjParser objParser(obj);
-    const auto mesh1 = objParser.parse();
     Mesh mesh2;
-    Vector A(1, 0, 0.7);
-    Vector B(1, 1, 0.7);
-    Vector C(0, 0, 0.7);
-    std::shared_ptr<Triangle> triangle = std::make_shared<Triangle>(A, B, C);
-    LightIntensity blue(0.0f, 0.0f, 1.0f);
-    const LightIntensity diffuse(0.8f, 0.8f, 0.8f);
-    const LightIntensity specular(0.2f, 0.2f, 0.2f);
+    LightIntensity blue(1.0f, 1.0f, 1.0f);
+    const LightIntensity diffuse(0.5f, 0.5f, 0.5f);
+    const LightIntensity specular(0.6f, 0.6f, 0.6f);
     const std::shared_ptr<Material> material = std::make_shared<Material>("", blue, diffuse, specular, 0.5f);
-    mesh2.addPrimitive(triangle);
+    BMP imageT;
+    imageT.ReadFromFile("earth.bmp");
+    const auto texture = std::make_shared<Texture>(imageT);
+    material->setTexture(texture);
 
-    Vector centerSphere(-0.5, 0, 0);
-    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(centerSphere, 0.3f);
+    Vector centerSphere(0, 0, -1.5f);
+    std::shared_ptr<Sphere> sphere = std::make_shared<Sphere>(centerSphere, 1.0f);
     mesh2.setMaterial(material);
     mesh2.addPrimitive(sphere);
 
     Scene scene;
-    scene.addMesh(mesh1);
     scene.addMesh(mesh2);
-    Vector surfacePoint1(-0.2, 0.7,1.5);
+    Vector surfacePoint1(1, 0, 1.5);
     scene.camera().setPosition(surfacePoint1);
     auto image = scene.camera().render();
-    image.WriteToFile("rendered_scene_with_mesh.bmp");
+    image.WriteToFile("result.bmp");
 }
 
 int main() {

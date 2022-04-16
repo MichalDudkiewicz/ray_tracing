@@ -76,8 +76,5 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
 }
 
 Vector Sphere::normal(const Vector& intersectionPoint) const {
-    Vector normal(mCenter - intersectionPoint);
-    normal = normal.normalize();
-    normal.negate();
-    return normal;
+    return (intersectionPoint - mCenter).normalize();
 }

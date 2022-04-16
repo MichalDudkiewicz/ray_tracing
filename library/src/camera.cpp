@@ -130,7 +130,7 @@ BMP Camera::render() const {
     image.SetBitDepth(kBitDepth);
     constexpr int ny = 600;
     const int nx = (int)(ny * mNearPlane * tanf((mFov / 2.0f) * M_PI / 180.f));
-    constexpr float screenProportion = 2.0f;
+    constexpr float screenProportion = 1.0f;
     image.SetSize(nx, (int)(nx/screenProportion));
 
     const Vector w = (-1.0f) * mTarget.normalize();
@@ -176,10 +176,33 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
         const auto intersection = mesh.intersection(ray);
         if (intersection.has_value())
         {
-            const auto ambientLightIntensity = mesh.material().ambientLight();
+            const auto intersectionPoint = std::get<0>(intersection.value());
+
+            const auto texture = mesh.material().texture();
+            LightIntensity textureLightIntensity(1.0f, 1.0f, 1.0f);
+            if (texture)
+            {
+                const auto primitiveHit = std::get<2>(intersection.value());
+                const auto sphere = std::dynamic_pointer_cast<Sphere>(primitiveHit);
+                if (sphere)
+                {
+                    const auto localCoordsIntersection = intersectionPoint - sphere->center();
+                    auto phi = atanf(localCoordsIntersection.x()/localCoordsIntersection.z());
+                    if (phi < 0.0f)
+                    {
+                        phi += 2 * M_PI;
+                    }
+                    const auto theta = acosf(localCoordsIntersection.y());
+                    const float u = phi / (2 * M_PI);
+                    const float v = 1.0f - theta / M_PI;
+                    textureLightIntensity = texture->color(u, v);
+                }
+            }
+            const auto ambientLightIntensity = mesh.material().ambientLight() * textureLightIntensity;
+
             auto accumulatedLightIntensity = ambientLightIntensity;
 
-            IntersectionInfo intersectionInfo(mesh.material(), intersection.value().first, intersection.value().second);
+            IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint, std::get<1>(intersection.value()));
 
             const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
             const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
@@ -199,7 +222,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
             }
             if (!isInShadow)
             {
-                const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo);
+                const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo) * textureLightIntensity;
                 const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
                 accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
             }

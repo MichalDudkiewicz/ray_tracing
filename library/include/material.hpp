@@ -1,6 +1,6 @@
 #pragma once
 #include "light_intensity.hpp"
-#include "EasyBMP_BMP.h"
+#include "texture.hpp"
 #include <memory>
 
 class Material {
@@ -13,7 +13,7 @@ public:
     void setSpecularLight(const LightIntensity& specularIntensity);
     void setDiffuseLight(const LightIntensity& diffuseIntensity);
     void setShininess(float shininess);
-    void setTexture(std::shared_ptr<BMP> texture);
+    void setTexture(std::shared_ptr<Texture> texture);
 
     const LightIntensity& ambientLight() const;
 
@@ -23,7 +23,7 @@ public:
 
     float shininess() const;
 
-    const BMP& texture() const;
+    const std::shared_ptr<Texture> &texture() const;
 
     const std::string& name() const;
 
@@ -33,6 +33,6 @@ private:
     LightIntensity mDiffuseLight;
     LightIntensity mSpecularLight;
     float mShininess;
-    std::shared_ptr<BMP> mTexture;
+    std::shared_ptr<Texture> mTexture;
 };
 

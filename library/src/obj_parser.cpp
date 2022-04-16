@@ -21,6 +21,9 @@ Mesh ObjParser::parse() const {
     std::string line;
     while(getline(stream, line))
     {
+        line.erase(std::remove_if(line.begin(), line.end(), [](const auto ch){
+            return isspace(ch) && ch != ' ';
+        }), line.end());
         if (line.empty() || line.front() == '#' || line.front() == ' ')
         {
             continue;
@@ -71,7 +74,7 @@ Mesh ObjParser::parse() const {
             if (floatValues.size() >= 3)
             {
                 Vector normal(floatValues[0], floatValues[1], floatValues[2]);
-                normal.normalize();
+                normal = normal.normalize();
                 normals.push_back(normal);
             }
         }

@@ -15,7 +15,7 @@ public:
 
     const std::string& groupName() const;
 
-    std::optional<std::pair<Vector, Vector>> intersection(const Ray &ray) const;
+    std::optional<std::tuple<Vector, Vector, std::shared_ptr<Primitive>>> intersection(const Ray &ray) const;
 
     const Material& material() const;
 

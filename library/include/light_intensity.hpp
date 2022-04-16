@@ -6,6 +6,8 @@
 class LightIntensity
 {
 public:
+    explicit LightIntensity(const RGBApixel& color);
+
     LightIntensity(float r = 0.0, float g = 0.0, float b = 0.0);
 
     LightIntensity(const LightIntensity& lightIntensity) = default;

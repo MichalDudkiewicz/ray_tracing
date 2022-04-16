@@ -16,6 +16,9 @@ std::shared_ptr<Material> MtlParser::parse() const {
     std::string line;
     while(getline(stream, line))
     {
+        line.erase(std::remove_if(line.begin(), line.end(), [](const auto ch){
+            return isspace(ch) && ch != ' ';
+        }), line.end());
         if (line.empty() || line.front() == '#' || line.front() == ' ')
         {
             continue;
@@ -94,8 +97,9 @@ std::shared_ptr<Material> MtlParser::parse() const {
         }
         else if (lineTitle == "map" || lineTitle == "map_Ka" || lineTitle == "map_Kd" || lineTitle == "map_Ks")
         {
-            const auto texture = std::make_shared<BMP>();
-            texture->ReadFromFile(numberStringValues.front().c_str());
+            BMP image;
+            image.ReadFromFile(numberStringValues.front().c_str());
+            const auto texture = std::make_shared<Texture>(image);
             material->setTexture(texture);
         }
     }

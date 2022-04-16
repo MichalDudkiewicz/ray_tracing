@@ -119,3 +119,9 @@ LightIntensity &LightIntensity::operator/=(const LightIntensity &li) {
     *this = *this / li;
     return *this;
 }
+
+LightIntensity::LightIntensity(const RGBApixel &color){
+    mR = (float)color.Red / 255.0f;
+    mG = (float)color.Green / 255.0f;
+    mB = (float)color.Blue / 255.0f;
+}

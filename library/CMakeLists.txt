@@ -20,6 +20,7 @@ add_library(library STATIC
         src/intersection_info.cpp
         src/material.cpp
         src/mtl_parser.cpp
+        src/texture.cpp
 
         include/primitive.hpp
         )
