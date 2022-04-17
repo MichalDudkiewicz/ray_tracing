@@ -130,6 +130,7 @@ BMP Camera::render() const {
     image.SetBitDepth(kBitDepth);
     constexpr int ny = 600;
     const int nx = (int)(ny * mNearPlane * tanf((mFov / 2.0f) * M_PI / 180.f));
+    // TODO: how to maintain rectangular image aspect ratio and use canonical space (-1,1) x2
     constexpr float screenProportion = 1.0f;
     image.SetSize(nx, (int)(nx/screenProportion));
 
