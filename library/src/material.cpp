@@ -53,3 +53,11 @@ void Material::setTexture(std::shared_ptr<Texture> texture) {
 const std::shared_ptr<Texture> &Material::texture() const {
     return mTexture;
 }
+
+const LightIntensity &Material::shadowLight() const {
+    return mSpecularLight;
+}
+
+void Material::setShadowLight(const LightIntensity &shadowIntensity) {
+    mShadowLightIntensity = shadowIntensity;
+}

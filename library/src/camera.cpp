@@ -6,7 +6,7 @@
 #include "EasyBMP_BMP.h"
 #include <cmath>
 #include "intersection_info.hpp"
-#include "triangle.hpp"
+#include "plane.hpp"
 
 namespace {
     RGBApixel kBackgroundColor{180, 180, 180, 255};
@@ -170,20 +170,30 @@ BMP Camera::render() const {
 RGBApixel Camera::getColorByPosition(const Vector& position) const {
     RGBApixel color = kBackgroundColor;
     const Ray ray = createRay(position.x(), position.y());
-
+    float maxZ = -mFarPlane;
     for (const auto& mesh : mScene.meshes())
     {
         const auto intersection = mesh.intersection(ray);
         if (intersection.has_value())
         {
             const auto intersectionPoint = std::get<0>(intersection.value());
+            if (intersectionPoint.z() <= maxZ)
+            {
+                continue;
+            }
+            else
+            {
+                maxZ = intersectionPoint.z();
+            }
 
             const auto texture = mesh.material().texture();
             LightIntensity textureLightIntensity(1.0f, 1.0f, 1.0f);
             if (texture)
             {
                 const auto primitiveHit = std::get<2>(intersection.value());
+                //TODO: how to handle any mesh and unwrapping any geometry?
                 const auto sphere = std::dynamic_pointer_cast<Sphere>(primitiveHit);
+                const auto plane = std::dynamic_pointer_cast<Plane>(primitiveHit);
                 if (sphere)
                 {
                     const auto localCoordsIntersection = intersectionPoint - sphere->center();
@@ -192,9 +202,34 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                     {
                         phi += 2 * M_PI;
                     }
+                    // TODO: what if radius is bigger than 1.0f?
+                    // http://raytracerchallenge.com/bonus/texture-mapping.html?fbclid=IwAR03ywQ6spI8EHgCBHqTEC04idLVRhSY7m_eAlEozc5tN8Ug8V2M6zxLH1Q
                     const auto theta = acosf(localCoordsIntersection.y());
                     const float u = phi / (2 * M_PI);
                     const float v = 1.0f - theta / M_PI;
+                    textureLightIntensity = texture->color(u, v);
+                }
+                else if (plane)
+                {
+                    // TODO: how to handle normalising plane process correctly?
+                    auto localCoordsIntersection = intersectionPoint - plane->point();
+                    if (plane->normal(intersectionPoint).x() != 1.0f)
+                    {
+                        localCoordsIntersection.setX(localCoordsIntersection.x()/std::abs((plane->lowerLeftCorner().x() - plane->upperRightCorner().x())));
+                    }
+                    if (plane->normal(intersectionPoint).y() != 1.0f)
+                    {
+                        localCoordsIntersection.setY(localCoordsIntersection.y()/std::abs((plane->lowerLeftCorner().y() - plane->upperRightCorner().y())));
+                    }
+                    if (plane->normal(intersectionPoint).z() != 1.0f)
+                    {
+                        localCoordsIntersection.setZ(localCoordsIntersection.z()/std::abs((plane->lowerLeftCorner().z() - plane->upperRightCorner().z())));
+                    }
+
+                    // TODO: how to handle rotated plane, so that y is 0 and z is not?
+                    const float u = ((localCoordsIntersection.y()) + 1.0f) / 2.0f;
+                    const float v = (localCoordsIntersection.x() + 1.0f) / 2.0f;
+
                     textureLightIntensity = texture->color(u, v);
                 }
             }
@@ -228,8 +263,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
             }
             else
             {
-                const LightIntensity shadowLightIntensity(0.5, 0.5, 0.5);
-                accumulatedLightIntensity -= shadowLightIntensity;
+                accumulatedLightIntensity -= mesh.material().shadowLight();
             }
 
             color = accumulatedLightIntensity.toColor();

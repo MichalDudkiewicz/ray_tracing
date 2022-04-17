@@ -12,14 +12,18 @@ public:
     void setAmbientLight(const LightIntensity& ambientIntensity);
     void setSpecularLight(const LightIntensity& specularIntensity);
     void setDiffuseLight(const LightIntensity& diffuseIntensity);
+    void setShadowLight(const LightIntensity& shadowIntensity);
     void setShininess(float shininess);
     void setTexture(std::shared_ptr<Texture> texture);
+
 
     const LightIntensity& ambientLight() const;
 
     const LightIntensity& diffuseLight() const;
 
     const LightIntensity& specularLight() const;
+
+    const LightIntensity& shadowLight() const;
 
     float shininess() const;
 
@@ -34,5 +38,6 @@ private:
     LightIntensity mSpecularLight;
     float mShininess;
     std::shared_ptr<Texture> mTexture;
+    LightIntensity mShadowLightIntensity{0.5, 0.5, 0.5};
 };
 

@@ -13,6 +13,7 @@
 #include "scene.hpp"
 #include "triangle.hpp"
 #include "obj_parser.hpp"
+#include "plane.hpp"
 
 void task1()
 {
@@ -78,7 +79,7 @@ void task1()
     //podpunkt 8
     //Prosz� znale�� punkt przeci�cia p�aszczyzny P z promieniem R2.
 
-    const auto point = p.intersectionPoint(r3);
+    const auto point = p.intersection(r3);
 
     if (point.has_value())
     {
@@ -110,10 +111,10 @@ void task2()
 void task3()
 {
     Mesh mesh2;
-    LightIntensity blue(1.0f, 1.0f, 1.0f);
+    LightIntensity allLight(1.0f, 1.0f, 1.0f);
     const LightIntensity diffuse(0.5f, 0.5f, 0.5f);
     const LightIntensity specular(0.6f, 0.6f, 0.6f);
-    const std::shared_ptr<Material> material = std::make_shared<Material>("", blue, diffuse, specular, 0.5f);
+    const std::shared_ptr<Material> material = std::make_shared<Material>("", allLight, diffuse, specular, 0.5f);
     BMP imageT;
     imageT.ReadFromFile("earth.bmp");
     const auto texture = std::make_shared<Texture>(imageT);
@@ -124,9 +125,25 @@ void task3()
     mesh2.setMaterial(material);
     mesh2.addPrimitive(sphere);
 
+    Vector lowerLeft(-3.0f, -7.0f, -4.0f);
+    Vector upperRight(8.0f, 7.0f, -4.0f);
+    Vector normal(0, 0, 1.0f);
+    std::shared_ptr<Plane> plane = std::make_shared<Plane>(lowerLeft, upperRight, normal);
+    Mesh mesh1;
+    LightIntensity dark(0.4f, 0.4f, 0.4f);
+    const LightIntensity noLight(0.0f, 0.0f, 0.0f);
+    const std::shared_ptr<Material> material2 = std::make_shared<Material>("", dark, noLight, noLight, 0.0f);
+    BMP imageT2;
+    imageT2.ReadFromFile("sky.bmp");
+    const auto texture2 = std::make_shared<Texture>(imageT2);
+    material2->setTexture(texture2);
+    material2->setShadowLight(noLight);
+    mesh1.setMaterial(material2);
+    mesh1.addPrimitive(plane);
     Scene scene;
     scene.addMesh(mesh2);
-    Vector surfacePoint1(1, 0, 1.5);
+    scene.addMesh(mesh1);
+    Vector surfacePoint1(1.5, 0, 1.5);
     scene.camera().setPosition(surfacePoint1);
     auto image = scene.camera().render();
     image.WriteToFile("result.bmp");

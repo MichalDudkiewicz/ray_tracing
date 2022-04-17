@@ -13,11 +13,11 @@ const Vector &Surface::point() {
     return mPoint;
 }
 
-const Vector &Surface::normal() {
+Vector Surface::normal(const Vector& /*intersectionPoint*/) const {
     return mNormal;
 }
 
-std::optional<Vector> Surface::intersectionPoint(const Ray &ray) const {
+std::optional<Vector> Surface::intersection(const Ray &ray) const {
     const auto t = shift();
     Vector V = ray.direction().normalize();
     V.negate();

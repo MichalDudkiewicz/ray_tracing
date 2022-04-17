@@ -16,7 +16,7 @@ Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c)
 
 std::optional<Vector> Triangle::intersection(const Ray &ray) const {
     Surface triangleSurface(mA, mNormal);
-    auto surfaceIntersectionPoint = triangleSurface.intersectionPoint(ray);
+    auto surfaceIntersectionPoint = triangleSurface.intersection(ray);
     if (surfaceIntersectionPoint.has_value() && !isInsideTriangle(surfaceIntersectionPoint.value()))
     {
         return std::nullopt;

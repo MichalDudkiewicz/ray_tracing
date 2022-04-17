@@ -21,6 +21,7 @@ add_library(library STATIC
         src/material.cpp
         src/mtl_parser.cpp
         src/texture.cpp
+        src/plane.cpp
 
         include/primitive.hpp
         )
