@@ -262,7 +262,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int i) const
                     const auto intersection2 = primitive2->intersection(reflectionRay);
                     if (intersection2.has_value())
                     {
-//                        isInShadow = true;
+                        isInShadow = true;
                         break;
                     }
                 }
