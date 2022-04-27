@@ -9,7 +9,7 @@
 #include "plane.hpp"
 
 namespace {
-    RGBApixel kBackgroundColor{180, 180, 180, 255};
+    constexpr RGBApixel kBackgroundColor{180, 180, 180, 255};
 }
 
 void Camera::setPosition(const Vector &newPosition) {
@@ -169,22 +169,33 @@ BMP Camera::render() const {
 }
 
 RGBApixel Camera::getColorByPosition(const Vector& position) const {
-    RGBApixel color = kBackgroundColor;
-    const Ray ray = createRay(position.x(), position.y());
-    float maxZ = -mFarPlane;
+    Ray ray = createRay(position.x(), position.y());
+    ray.setDistance(mFarPlane);
+    return traceRay(ray).toColor();
+}
+
+LightIntensity Camera::traceRay(const Ray& ray, int i) const
+{
+    if (i > 1)
+    {
+        throw std::runtime_error("error");
+    }
+    LightIntensity accumulatedLightIntensity(0.5, 0.5, 0.5);
+    float minDistance = ray.distance();
     for (const auto& mesh : mScene.meshes())
     {
         const auto intersection = mesh.intersection(ray);
         if (intersection.has_value())
         {
             const auto intersectionPoint = std::get<0>(intersection.value());
-            if (intersectionPoint.z() <= maxZ)
+            const float newDistance = (intersectionPoint - ray.origin()).length();
+            if (newDistance > minDistance)
             {
                 continue;
             }
             else
             {
-                maxZ = intersectionPoint.z();
+                minDistance = newDistance;
             }
 
             const auto texture = mesh.material().texture();
@@ -236,13 +247,13 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
             }
             const auto ambientLightIntensity = mesh.material().ambientLight() * textureLightIntensity;
 
-            auto accumulatedLightIntensity = ambientLightIntensity;
+            accumulatedLightIntensity = ambientLightIntensity;
 
             IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint, std::get<1>(intersection.value()));
 
-            const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
-            const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
-            Ray reflectionRay(beforeIntersectionPoint, reflectionDir, mScene.light().lightDirection(beforeIntersectionPoint).length() - 0.001f);
+            auto lightDir = mScene.light().lightDirection(intersectionInfo.position()).normalize();
+            const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * lightDir;
+            Ray reflectionRay(beforeIntersectionPoint, lightDir, mScene.light().lightDirection(beforeIntersectionPoint).length() - 0.001f);
             bool isInShadow = false;
             for (const auto& mesh2 : mScene.meshes())
             {
@@ -251,7 +262,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                     const auto intersection2 = primitive2->intersection(reflectionRay);
                     if (intersection2.has_value())
                     {
-                        isInShadow = true;
+//                        isInShadow = true;
                         break;
                     }
                 }
@@ -261,14 +272,24 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
                 const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo) * textureLightIntensity;
                 const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
                 accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
+
+                if (mesh.material().isMirror())
+                {
+                    const Vector V = ray.direction().normalize();
+                    const Vector& N = intersectionInfo.normal();
+                    const Vector R = V - (N * N.dotProduct(V) * 2.0f);
+
+                    const Vector beforeIntersectionVPoint = intersectionInfo.position() + 0.1 * N;
+                    Ray reflectedRay(beforeIntersectionVPoint, R, 1000.0f);
+                    const auto reflectedLightIntensity = traceRay(reflectedRay, i + 1);
+                    accumulatedLightIntensity += reflectedLightIntensity;
+                }
             }
             else
             {
                 accumulatedLightIntensity -= mesh.material().shadowLight();
             }
-
-            color = accumulatedLightIntensity.toColor();
         }
     }
-    return color;
+    return accumulatedLightIntensity;
 }

@@ -157,7 +157,7 @@ int main() {
 //    taskX();
     const LightIntensity ambientLight(0.1f, 0.1f, 0.1f);
 
-    Mesh leftSideMesh("left");
+    Mesh leftSideMesh;
     const LightIntensity redLight(1.0f);
     const auto redMaterial = std::make_shared<Material>("", ambientLight, redLight);
     leftSideMesh.setMaterial(redMaterial);
@@ -176,7 +176,7 @@ int main() {
     rightSideMesh.addPrimitive(rightWall);
 
     Mesh restSidesMesh;
-    const LightIntensity greyLight(0.5f, 0.5f, 0.5f);
+    const LightIntensity greyLight(0.3f, 0.3f, 0.3f);
     const auto greyMaterial = std::make_shared<Material>("", ambientLight, greyLight);
     restSidesMesh.setMaterial(greyMaterial);
 
@@ -195,10 +195,29 @@ int main() {
     const auto upperWall = std::make_shared<Surface>(upperSide, upperNormal);
     restSidesMesh.addPrimitive(upperWall);
 
+    Mesh frontSideMesh;
+    const LightIntensity greenLight(0.0f, 1.0f, 0.0f);
+    const auto greenMaterial = std::make_shared<Material>("", ambientLight, greenLight);
+    frontSideMesh.setMaterial(greenMaterial);
+    const Vector frontSide(0.0f, 0.0f, 0.5f);
+    const Vector frontNormal(0.0f, 0.0f, -1.0f);
+    const auto frontWall = std::make_shared<Surface>(frontSide, frontNormal);
+    frontSideMesh.addPrimitive(frontWall);
+
+    Mesh sphereMirrorMesh("sfera");
+    const auto mirrorMaterial = std::make_shared<Material>("", ambientLight, greyLight);
+    mirrorMaterial->setMirror(true);
+    sphereMirrorMesh.setMaterial(mirrorMaterial);
+    const Vector sphere1Center(-0.5f, -0.75f, -1.75f);
+    const auto sphere1 = std::make_shared<Sphere>(sphere1Center, 0.25f);
+    sphereMirrorMesh.addPrimitive(sphere1);
+
     Scene scene;
     scene.addMesh(leftSideMesh);
     scene.addMesh(rightSideMesh);
     scene.addMesh(restSidesMesh);
+    scene.addMesh(sphereMirrorMesh);
+    scene.addMesh(frontSideMesh);
     Vector centerPoint;
     scene.camera().setPosition(centerPoint);
     scene.camera().setFarPlane(3.0f);

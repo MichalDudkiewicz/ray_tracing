@@ -20,7 +20,7 @@ Mesh::Mesh(std::string groupName) : mGroupName(std::move(groupName))
 }
 
 std::optional<std::tuple<Vector, Vector, std::shared_ptr<Primitive>>> Mesh::intersection(const Ray &ray) const {
-    float minZIntersection = (ray.origin() + ray.direction()*ray.distance()).z();
+    float minDistance = ray.distance();
     std::optional<std::tuple<Vector, Vector, std::shared_ptr<Primitive>>> intersectionData;
     for (const auto& primitive : mPrimitives)
     {
@@ -28,10 +28,11 @@ std::optional<std::tuple<Vector, Vector, std::shared_ptr<Primitive>>> Mesh::inte
         if (intersection.has_value())
         {
             const auto& minZIntersectionPoint = intersection.value();
-            if (minZIntersectionPoint.z() > minZIntersection)
+            const float newDistance = (minZIntersectionPoint - ray.origin()).length();
+            if (newDistance < minDistance)
             {
                 intersectionData = std::make_tuple(minZIntersectionPoint, primitive->normal(minZIntersectionPoint), primitive);
-                minZIntersection = minZIntersectionPoint.z();
+                minDistance = newDistance;
             }
         }
     }

@@ -28,8 +28,8 @@ void Material::setDiffuseLight(const LightIntensity &diffuseLight) {
     mDiffuseLight = diffuseLight;
 }
 
-Material::Material(std::string name, LightIntensity lightIntensity, LightIntensity diffuseLight, LightIntensity specularLight, float shininess)
-: mName(std::move(name)), mAmbientLight(lightIntensity), mDiffuseLight(diffuseLight), mSpecularLight(specularLight), mShininess(shininess)
+Material::Material(std::string name, LightIntensity lightIntensity, LightIntensity diffuseLight, LightIntensity specularLight, float shininess, bool isMirror)
+: mName(std::move(name)), mAmbientLight(lightIntensity), mDiffuseLight(diffuseLight), mSpecularLight(specularLight), mShininess(shininess), mIsMirror(isMirror)
 {
 
 }
@@ -60,4 +60,12 @@ const LightIntensity &Material::shadowLight() const {
 
 void Material::setShadowLight(const LightIntensity &shadowIntensity) {
     mShadowLightIntensity = shadowIntensity;
+}
+
+void Material::setMirror(bool isMirror) {
+    mIsMirror = isMirror;
+}
+
+bool Material::isMirror() const {
+    return mIsMirror;
 }

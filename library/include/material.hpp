@@ -5,7 +5,7 @@
 
 class Material {
 public:
-    Material(std::string name = "", LightIntensity ambientLight = {}, LightIntensity diffuseLight = {}, LightIntensity specularLight = {}, float shininess = 0.0f);
+    Material(std::string name = "", LightIntensity ambientLight = {}, LightIntensity diffuseLight = {}, LightIntensity specularLight = {}, float shininess = 0.0f, bool isMirror = false);
 
     void setName(const std::string& name);
 
@@ -15,6 +15,9 @@ public:
     void setShadowLight(const LightIntensity& shadowIntensity);
     void setShininess(float shininess);
     void setTexture(std::shared_ptr<Texture> texture);
+    bool isMirror() const;
+
+    void setMirror(bool isMirror);
 
 
     const LightIntensity& ambientLight() const;
@@ -39,5 +42,6 @@ private:
     float mShininess;
     std::shared_ptr<Texture> mTexture;
     LightIntensity mShadowLightIntensity{0.5, 0.5, 0.5};
+    bool mIsMirror;
 };
 

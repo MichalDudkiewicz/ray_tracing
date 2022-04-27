@@ -3,6 +3,7 @@
 #include "vector.hpp"
 #include "ray.hpp"
 #include "EasyBMP_BMP.h"
+#include "light_intensity.hpp"
 
 class Scene;
 
@@ -33,6 +34,7 @@ protected:
 private:
     void dividePixel(const Vector& center, float width, float height, int& redSum, int& greenSum, int& blueSum, int& sum, int depth = 1) const;
     RGBApixel getColorByPosition(const Vector& position) const;
+    LightIntensity traceRay(const Ray& ray, int i = 0) const;
 
 protected:
     Scene& mScene;
