@@ -242,7 +242,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
 
             const auto reflectionDir = mScene.light().lightDirection(intersectionInfo.position());
             const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * reflectionDir;
-            Ray reflectionRay(beforeIntersectionPoint, reflectionDir, 1000.0f);
+            Ray reflectionRay(beforeIntersectionPoint, reflectionDir, mScene.light().lightDirection(beforeIntersectionPoint).length() - 0.001f);
             bool isInShadow = false;
             for (const auto& mesh2 : mScene.meshes())
             {

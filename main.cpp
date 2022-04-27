@@ -154,7 +154,56 @@ int main() {
 
 //    task2();
 
-    task3();
+//    taskX();
+    const LightIntensity ambientLight(0.1f, 0.1f, 0.1f);
+
+    Mesh leftSideMesh("left");
+    const LightIntensity redLight(1.0f);
+    const auto redMaterial = std::make_shared<Material>("", ambientLight, redLight);
+    leftSideMesh.setMaterial(redMaterial);
+    const Vector leftSide(-1.0f);
+    const Vector leftNormal(1.0f);
+    const auto leftWall = std::make_shared<Surface>(leftSide, leftNormal);
+    leftSideMesh.addPrimitive(leftWall);
+
+    Mesh rightSideMesh;
+    const LightIntensity blueLight(0.0f, 0.0f, 1.0f);
+    const auto blueMaterial = std::make_shared<Material>("", ambientLight, blueLight);
+    rightSideMesh.setMaterial(blueMaterial);
+    const Vector rightSide(1.0f);
+    const Vector rightNormal(-1.0f);
+    const auto rightWall = std::make_shared<Surface>(rightSide, rightNormal);
+    rightSideMesh.addPrimitive(rightWall);
+
+    Mesh restSidesMesh;
+    const LightIntensity greyLight(0.5f, 0.5f, 0.5f);
+    const auto greyMaterial = std::make_shared<Material>("", ambientLight, greyLight);
+    restSidesMesh.setMaterial(greyMaterial);
+
+    const Vector backSide(0.0f, 0.0f, -2.0f);
+    const Vector backNormal(0.0f, 0.0f, 1.0f);
+    const auto backWall = std::make_shared<Surface>(backSide, backNormal);
+    restSidesMesh.addPrimitive(backWall);
+
+    const Vector bottomSide(0.0f, -1.0f);
+    const Vector bottomNormal(0.0f, 1.0f);
+    const auto bottomWall = std::make_shared<Surface>(bottomSide, bottomNormal);
+    restSidesMesh.addPrimitive(bottomWall);
+
+    const Vector upperSide(0.0f, 1.0f);
+    const Vector upperNormal(0.0f, -1.0f);
+    const auto upperWall = std::make_shared<Surface>(upperSide, upperNormal);
+    restSidesMesh.addPrimitive(upperWall);
+
+    Scene scene;
+    scene.addMesh(leftSideMesh);
+    scene.addMesh(rightSideMesh);
+    scene.addMesh(restSidesMesh);
+    Vector centerPoint;
+    scene.camera().setPosition(centerPoint);
+    scene.camera().setFarPlane(3.0f);
+    auto image = scene.camera().render();
+    image.WriteToFile("result.bmp");
 
     return 0;
 }
