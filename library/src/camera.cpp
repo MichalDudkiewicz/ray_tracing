@@ -174,12 +174,8 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
     return traceRay(ray).toColor();
 }
 
-LightIntensity Camera::traceRay(const Ray& ray, int i) const
+LightIntensity Camera::traceRay(const Ray& ray) const
 {
-    if (i > 1)
-    {
-        throw std::runtime_error("error");
-    }
     LightIntensity accumulatedLightIntensity(0.5, 0.5, 0.5);
     float minDistance = ray.distance();
     for (const auto& mesh : mScene.meshes())
@@ -281,7 +277,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int i) const
 
                     const Vector beforeIntersectionVPoint = intersectionInfo.position() + 0.1 * N;
                     Ray reflectedRay(beforeIntersectionVPoint, R, 1000.0f);
-                    const auto reflectedLightIntensity = traceRay(reflectedRay, i + 1);
+                    const auto reflectedLightIntensity = traceRay(reflectedRay);
                     accumulatedLightIntensity += reflectedLightIntensity;
                 }
             }
