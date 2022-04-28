@@ -69,3 +69,11 @@ void Material::setMirror(bool isMirror) {
 bool Material::isMirror() const {
     return mIsMirror;
 }
+
+void Material::setRefractionFactor(float refractionFactor) {
+    mRefractionFactor = refractionFactor;
+}
+
+float Material::refractionFactor() const {
+    return mRefractionFactor;
+}

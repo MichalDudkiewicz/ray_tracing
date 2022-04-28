@@ -62,6 +62,10 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
                 intersectionPointOpt = intersections[1];
             }
         }
+        else if (intersections.size() == 1)
+        {
+            intersectionPointOpt = intersections.front();
+        }
     }
     else if (delta == 0)
     {

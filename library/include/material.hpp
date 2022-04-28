@@ -18,6 +18,8 @@ public:
     bool isMirror() const;
 
     void setMirror(bool isMirror);
+    void setRefractionFactor(float refractionFactor);
+    float refractionFactor() const;
 
 
     const LightIntensity& ambientLight() const;
@@ -43,5 +45,6 @@ private:
     std::shared_ptr<Texture> mTexture;
     LightIntensity mShadowLightIntensity{0.5, 0.5, 0.5};
     bool mIsMirror;
+    float mRefractionFactor = 1.0f;
 };
 
