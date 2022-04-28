@@ -267,7 +267,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     }
                 }
             }
-            if (!isInShadow)
+            if (!isInShadow || mesh.material().refractionFactor()>1.0f || mesh.material().isMirror())
             {
                 const auto diffuseLightIntensity = mScene.light().diffuse(intersectionInfo) * textureLightIntensity;
                 const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
