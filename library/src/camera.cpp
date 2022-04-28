@@ -273,40 +273,36 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                 const auto specularLightIntensity = mScene.light().specular(intersectionInfo, ray);
                 accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
 
-                if (mesh.material().isMirror())
-                {
-                    const Vector V = ray.direction().normalize();
-                    const Vector& N = intersectionInfo.normal();
-                    const Vector R = V - (N * N.dotProduct(V) * 2.0f);
+                if (reflectedRayCounter < kMaxReflectedRaysNumber) {
+                    if (mesh.material().isMirror()) {
+                        const Vector V = ray.direction().normalize();
+                        const Vector &N = intersectionInfo.normal();
+                        const Vector R = V - (N * N.dotProduct(V) * 2.0f);
 
-                    const Vector beforeIntersectionVPoint = intersectionInfo.position() + 0.1 * N;
-                    Ray reflectedRay(beforeIntersectionVPoint, R, 1000.0f);
-                    if (reflectedRayCounter < kMaxReflectedRaysNumber)
-                    {
-                        const auto reflectedLightIntensity = traceRay(reflectedRay, reflectedRayCounter+1);
+                        const Vector beforeIntersectionVPoint = intersectionInfo.position() + 0.1 * N;
+                        Ray reflectedRay(beforeIntersectionVPoint, R, 1000.0f);
+                        const auto reflectedLightIntensity = traceRay(reflectedRay, reflectedRayCounter + 1);
                         accumulatedLightIntensity += reflectedLightIntensity;
-                    }
-                }
-                else if (mesh.material().refractionFactor() > 1.0f)
-                {
-                    const Vector d = ray.direction().normalize();
-                    const Vector& n = intersectionInfo.normal();
-                    const auto lambdaT = mesh.material().refractionFactor();
-                    Vector t = (d - n*(d.dotProduct(n)))/lambdaT - n * sqrtf(1 - (1 - powf(d.dotProduct(n), 2.0f))/powf(lambdaT, 2.0f));
-                    t = t.normalize();
-                    const Vector innerIntersection = intersectionPoint - 0.01 * n;
-                    const Ray innerRay(innerIntersection, t, 1000.0f);
-                    const auto innerSecondIntersection = mesh.intersection(innerRay);
-                    if (innerSecondIntersection.has_value())
-                    {
-                        const Vector& d2 = t;
-                        Vector n2 = std::get<1>(innerSecondIntersection.value());
-                        n2.negate();
-                        Vector t2 = lambdaT * (d2 - n2*(d2.dotProduct(n2))) - n2 * sqrtf(1 - powf(lambdaT, 2.0f) * (1 - powf(d2.dotProduct(n2), 2.0f)));
-                        t2 = t2.normalize();
-                        const auto innerSecondIntersectionPoint = std::get<0>(innerSecondIntersection.value()) - 0.01 * n2;
-                        const Ray refractedRay(innerSecondIntersectionPoint, t2, 1000.0f);
-                        if (reflectedRayCounter < kMaxReflectedRaysNumber) {
+                    } else if (mesh.material().refractionFactor() > 1.0f) {
+                        const Vector d = ray.direction().normalize();
+                        const Vector &n = intersectionInfo.normal();
+                        const auto lambdaT = mesh.material().refractionFactor();
+                        Vector t = (d - n * (d.dotProduct(n))) / lambdaT -
+                                   n * sqrtf(1 - (1 - powf(d.dotProduct(n), 2.0f)) / powf(lambdaT, 2.0f));
+                        t = t.normalize();
+                        const Vector innerIntersection = intersectionPoint - 0.01 * n;
+                        const Ray innerRay(innerIntersection, t, 1000.0f);
+                        const auto innerSecondIntersection = mesh.intersection(innerRay);
+                        if (innerSecondIntersection.has_value()) {
+                            const Vector &d2 = t;
+                            Vector n2 = std::get<1>(innerSecondIntersection.value());
+                            n2.negate();
+                            Vector t2 = lambdaT * (d2 - n2 * (d2.dotProduct(n2))) -
+                                        n2 * sqrtf(1 - powf(lambdaT, 2.0f) * (1 - powf(d2.dotProduct(n2), 2.0f)));
+                            t2 = t2.normalize();
+                            const auto innerSecondIntersectionPoint =
+                                    std::get<0>(innerSecondIntersection.value()) - 0.01 * n2;
+                            const Ray refractedRay(innerSecondIntersectionPoint, t2, 1000.0f);
                             const auto refractedLightIntensity = traceRay(refractedRay, reflectedRayCounter + 1);
                             accumulatedLightIntensity += refractedLightIntensity;
                         }
