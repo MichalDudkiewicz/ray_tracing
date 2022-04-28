@@ -14,14 +14,8 @@ LightIntensity Light::diffuse(const IntersectionInfo &iInfo) const {
 
 LightIntensity Light::specular(const IntersectionInfo& iInfo, const Ray& ray) const
 {
-    Vector V = ray.direction().normalize();
-    V.negate();
+    const Vector V = ray.direction().normalize();
     const Vector& N = iInfo.normal();
-    Vector L = lightDirection(iInfo.position()).normalize();
-    if (L.dotProduct(N) < 0)
-    {
-        return {0, 0, 0};
-    }
     const Vector R = V - (N * N.dotProduct(V) * 2.0f);
     const float ss = powf(std::abs(R.dotProduct(V)), iInfo.material().shininess());
     return lightIntensity(iInfo.position()) * iInfo.material().specularLight() * ss;
