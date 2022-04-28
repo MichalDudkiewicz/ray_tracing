@@ -9,6 +9,10 @@
 #include "plane.hpp"
 
 namespace {
+    constexpr int kMaxReflectedRaysNumber = 5;
+}
+
+namespace {
     constexpr RGBApixel kBackgroundColor{180, 180, 180, 255};
 }
 
@@ -174,7 +178,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
     return traceRay(ray).toColor();
 }
 
-LightIntensity Camera::traceRay(const Ray& ray) const
+LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
 {
     LightIntensity accumulatedLightIntensity(0.5, 0.5, 0.5);
     float minDistance = ray.distance();
@@ -277,8 +281,11 @@ LightIntensity Camera::traceRay(const Ray& ray) const
 
                     const Vector beforeIntersectionVPoint = intersectionInfo.position() + 0.1 * N;
                     Ray reflectedRay(beforeIntersectionVPoint, R, 1000.0f);
-                    const auto reflectedLightIntensity = traceRay(reflectedRay);
-                    accumulatedLightIntensity += reflectedLightIntensity;
+                    if (reflectedRayCounter < kMaxReflectedRaysNumber)
+                    {
+                        const auto reflectedLightIntensity = traceRay(reflectedRay, reflectedRayCounter+1);
+                        accumulatedLightIntensity += reflectedLightIntensity;
+                    }
                 }
                 else if (mesh.material().refractionFactor() > 1.0f)
                 {
@@ -299,8 +306,10 @@ LightIntensity Camera::traceRay(const Ray& ray) const
                         t2 = t2.normalize();
                         const auto innerSecondIntersectionPoint = std::get<0>(innerSecondIntersection.value()) - 0.01 * n2;
                         const Ray refractedRay(innerSecondIntersectionPoint, t2, 1000.0f);
-                        const auto refractedLightIntensity = traceRay(refractedRay);
-                        accumulatedLightIntensity += refractedLightIntensity;
+                        if (reflectedRayCounter < kMaxReflectedRaysNumber) {
+                            const auto refractedLightIntensity = traceRay(refractedRay, reflectedRayCounter + 1);
+                            accumulatedLightIntensity += refractedLightIntensity;
+                        }
                     }
                 }
             }

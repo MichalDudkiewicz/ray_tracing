@@ -34,7 +34,7 @@ protected:
 private:
     void dividePixel(const Vector& center, float width, float height, int& redSum, int& greenSum, int& blueSum, int& sum, int depth = 1) const;
     RGBApixel getColorByPosition(const Vector& position) const;
-    LightIntensity traceRay(const Ray& ray) const;
+    LightIntensity traceRay(const Ray& ray, int reflectedRayCounter = 0) const;
 
 protected:
     Scene& mScene;
