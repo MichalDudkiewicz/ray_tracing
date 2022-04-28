@@ -55,7 +55,7 @@ const std::shared_ptr<Texture> &Material::texture() const {
 }
 
 const LightIntensity &Material::shadowLight() const {
-    return mSpecularLight;
+    return mShadowLightIntensity;
 }
 
 void Material::setShadowLight(const LightIntensity &shadowIntensity) {

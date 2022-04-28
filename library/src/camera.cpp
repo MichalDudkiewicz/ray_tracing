@@ -248,17 +248,17 @@ LightIntensity Camera::traceRay(const Ray& ray) const
             IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint, std::get<1>(intersection.value()));
 
             auto lightDir = mScene.light().lightDirection(intersectionInfo.position()).normalize();
-            const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.00001 * lightDir;
-            Ray reflectionRay(beforeIntersectionPoint, lightDir, mScene.light().lightDirection(beforeIntersectionPoint).length() - 0.001f);
+            const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.1 * lightDir;
+            const Ray shadowRay(beforeIntersectionPoint, lightDir, mScene.light().lightDirection(beforeIntersectionPoint).length() - 0.01f);
             bool isInShadow = false;
             for (const auto& mesh2 : mScene.meshes())
             {
                 for (const auto& primitive2 : mesh2.primitives())
                 {
-                    const auto intersection2 = primitive2->intersection(reflectionRay);
+                    const auto intersection2 = primitive2->intersection(shadowRay);
                     if (intersection2.has_value())
                     {
-//                        isInShadow = true;
+                        isInShadow = true;
                         break;
                     }
                 }
@@ -300,7 +300,7 @@ LightIntensity Camera::traceRay(const Ray& ray) const
                         const auto innerSecondIntersectionPoint = std::get<0>(innerSecondIntersection.value()) - 0.01 * n2;
                         const Ray refractedRay(innerSecondIntersectionPoint, t2, 1000.0f);
                         const auto refractedLightIntensity = traceRay(refractedRay);
-                        accumulatedLightIntensity = refractedLightIntensity;
+                        accumulatedLightIntensity += refractedLightIntensity;
                     }
                 }
             }
