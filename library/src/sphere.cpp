@@ -20,7 +20,7 @@ bool Sphere::isOnSurface(const Vector &point) const {
     return (pointOriginDiff.dotProduct(pointOriginDiff) - powf(mRadius, 2.0f)) == 0.0f;
 }
 
-float round(float var)
+float roundTo3(float var)
 {
     int value = (int)(var * 1000 + .5);
     return (float)value / 1000;
@@ -37,9 +37,9 @@ std::optional<Vector> Sphere::intersection(const Ray &ray) const {
     if (delta > 0) {
         const auto det = sqrtf(delta);
         float i1 = (b - det) / a;
-        i1 = round(i1);
+        i1 = roundTo3(i1);
         float i2 = (b + det) / a;
-        i2 = round(i2);
+        i2 = roundTo3(i2);
         std::vector<Vector> intersections;
         if (i2 >= 0 && i2 <= dist)
         {
