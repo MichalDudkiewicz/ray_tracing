@@ -1,6 +1,6 @@
 #include "scene.hpp"
 
-Scene::Scene() : mCamera(*this), mLight({1.0, 1.0, 1.0}, {0.0 ,1.0, -1.5}) {
+Scene::Scene() : mCamera(*this) {
 }
 
 Camera& Scene::camera() {
@@ -15,6 +15,10 @@ const std::vector<Mesh> &Scene::meshes() const {
     return mMeshes;
 }
 
-const Light &Scene::light() const {
+void Scene::addLight(const std::shared_ptr<Light> &light) {
+    mLight.push_back(light);
+}
+
+const std::vector<std::shared_ptr<Light>> &Scene::light() const {
     return mLight;
 }
