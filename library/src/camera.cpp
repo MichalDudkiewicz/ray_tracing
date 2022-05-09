@@ -251,7 +251,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
 
             IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint, std::get<1>(intersection.value()));
 
-            for (const auto& light : mScene.light()) 
+            for (const auto& light : mScene.lights()) 
             {
                 auto lightDir = light->lightDirection(intersectionInfo.position()).normalize();
                 const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.1 * lightDir;

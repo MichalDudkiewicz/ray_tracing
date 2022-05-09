@@ -21,12 +21,12 @@ public:
 
     const std::vector<Mesh>& meshes() const;
 
-    const std::vector<std::shared_ptr<Light>>& light() const;
+    const std::vector<std::shared_ptr<Light>>& lights() const;
 
 
 private:
     PanoramicCamera mCamera;
     std::vector<Mesh> mMeshes;
-    std::vector<std::shared_ptr<Light>> mLight;
+    std::vector<std::shared_ptr<Light>> mLights;
 };
 

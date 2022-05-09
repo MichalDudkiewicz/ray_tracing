@@ -16,9 +16,9 @@ const std::vector<Mesh> &Scene::meshes() const {
 }
 
 void Scene::addLight(const std::shared_ptr<Light> &light) {
-    mLight.push_back(light);
+    mLights.push_back(light);
 }
 
-const std::vector<std::shared_ptr<Light>> &Scene::light() const {
-    return mLight;
+const std::vector<std::shared_ptr<Light>> &Scene::lights() const {
+    return mLights;
 }

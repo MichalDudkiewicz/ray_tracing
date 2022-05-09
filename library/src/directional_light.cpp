@@ -1,9 +1,8 @@
 #include "directional_light.hpp"
 
-Vector DirectionalLight::lightDirection(const Vector &/*position*/) const {
-    return mDirection;
+Vector DirectionalLight::lightDirection(const Vector&/*position*/) const {
+    return mDirection * (-1);
 }
-
 DirectionalLight::DirectionalLight(const LightIntensity &lightIntensity, const Vector &direction)
 : Light(lightIntensity), mDirection(direction)
 {

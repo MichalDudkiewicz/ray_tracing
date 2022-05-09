@@ -228,15 +228,15 @@ int main() {
     scene.addMesh(frontSideMesh);
     scene.addMesh(sphereGlassMesh);
 
-    LightIntensity li(0.0, 0.0, 1.0);
-    Vector lp(0.0, 1.0, -1.5);
+    LightIntensity li(0.3, 0.3, 0.3);
+    Vector lp(0.5, 1.0, -1.5);
 
     auto light = std::make_shared<PointLight>(li, lp);
     scene.addLight(light);
 
 
-    LightIntensity li1(1.0, 0.0, 0.0);
-    Vector lp1(-1.5, 1.0, -1.5);
+    LightIntensity li1(0.3, 0.3, 0.3);
+    Vector lp1(-0.5, 1.0, -1.5);
 
     auto light1 = std::make_shared<PointLight>(li1, lp1);
     scene.addLight(light1);
