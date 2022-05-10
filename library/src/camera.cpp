@@ -255,6 +255,8 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
             {
                 auto lightDir = light->lightDirection(intersectionInfo.position()).normalize();
                 const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.1 * lightDir;
+                // TODO: shadowRay distance for directional light should be calculated dirrefently than based on light position.
+                //  most probably it should be big number, in theory close to infinity
                 const Ray shadowRay(beforeIntersectionPoint, lightDir, light->lightDirection(beforeIntersectionPoint).length() - 0.01f);
                 bool isInShadow = false;
                 for (const auto& mesh2 : mScene.meshes())
@@ -317,10 +319,6 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     accumulatedLightIntensity -= mesh.material().shadowLight();
                 }
             }
-            
-            
-
-
             
         }
     }
