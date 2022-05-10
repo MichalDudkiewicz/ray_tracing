@@ -43,7 +43,7 @@ private:
     LightIntensity mSpecularLight;
     float mShininess;
     std::shared_ptr<Texture> mTexture;
-    LightIntensity mShadowLightIntensity{0.2, 0.2, 0.2};
+    LightIntensity mShadowLightIntensity{0.1, 0.1, 0.1};
     bool mIsMirror;
     float mRefractionFactor = 1.0f;
 };
