@@ -6,6 +6,7 @@
 #include <vector>
 #include <sstream>
 #include <fstream>
+#include <chrono>
 #include "vector_operators.hpp"
 #include "EasyBMP_BMP.h"
 #include "EasyBMP_DataStructures.h"
@@ -245,7 +246,15 @@ int main() {
     Vector centerPoint;
     scene.camera().setPosition(centerPoint);
     scene.camera().setFarPlane(3.0f);
+
+    const auto start = std::chrono::steady_clock::now();
+
     auto image = scene.camera().render();
+
+    const auto end = std::chrono::steady_clock::now();
+    const auto time_span = static_cast<std::chrono::duration<double>>(end - start);
+    std::cout<<"Rendering time: " << time_span.count() << " seconds";
+
     image.WriteToFile("result.bmp");
 
     return 0;
