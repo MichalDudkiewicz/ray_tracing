@@ -184,6 +184,11 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
     float minDistance = ray.distance();
     for (const auto& mesh : mScene.meshes())
     {
+        if (mesh.hasBoundingBox() && !mesh.intersectsBoundingBox(ray))
+        {
+            continue;
+        }
+
         const auto intersection = mesh.intersection(ray);
         if (intersection.has_value())
         {

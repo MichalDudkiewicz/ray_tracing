@@ -117,4 +117,30 @@ bool Vector::operator==(const Vector &other) const {
     return mX == other.mX && mY == other.mY && mZ == other.mZ;
 }
 
+const float &Vector::operator[](int i) const {
+    switch (i) {
+        case 0:
+            return mX;
+        case 1:
+            return mY;
+        case 2:
+            return mZ;
+        default:
+            throw std::runtime_error("out of range");
+    }
+}
+
+float &Vector::operator[](int i) {
+    switch (i) {
+        case 0:
+            return mX;
+        case 1:
+            return mY;
+        case 2:
+            return mZ;
+        default:
+            throw std::runtime_error("out of range");
+    }
+}
+
 

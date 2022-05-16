@@ -35,6 +35,10 @@ public:
 
     bool operator==(const Vector& other) const;
 
+    const float& operator[](int i) const;
+
+    float& operator[](int i);
+
 private:
     float mX;
     float mY;

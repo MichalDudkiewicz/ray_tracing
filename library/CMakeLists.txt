@@ -22,8 +22,8 @@ add_library(library STATIC
         src/mtl_parser.cpp
         src/texture.cpp
         src/plane.cpp
-
-        include/primitive.hpp
+        src/primitive.cpp
+        src/cuboid.cpp
         )
 
 target_include_directories(library PUBLIC include EasyBMP_1.06)

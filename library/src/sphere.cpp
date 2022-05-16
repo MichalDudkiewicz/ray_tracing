@@ -1,10 +1,12 @@
 #include "sphere.hpp"
 #include <cmath>
 #include <vector>
-#include <iomanip>
 #include "vector_operators.hpp"
 
-Sphere::Sphere(const Vector &center, float radius) : mCenter(center), mRadius(radius) {
+Sphere::Sphere(const Vector &center, float radius)
+: Primitive({center.x()-radius, center.y()-radius, center.z()-radius}, {center.x()+radius, center.y()+radius, center.z()+radius}),
+  mCenter(center), mRadius(radius)
+{
 }
 
 const Vector &Sphere::center() const {

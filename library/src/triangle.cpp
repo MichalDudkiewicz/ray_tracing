@@ -1,16 +1,21 @@
 #include "triangle.hpp"
 #include "surface.hpp"
+#include <algorithm>
 
 #define MINUS_ZERO -0.0001
 
 Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c, const Vector &normal)
-: mA(a), mB(b), mC(c), mNormal(normal)
+: Primitive({std::min({a.x(), b.x(), c.x()}), std::min({a.y(), b.y(), c.y()}), std::min({a.z(), b.z(), c.z()})},
+            {std::max({a.x(), b.x(), c.x()}), std::max({a.y(), b.y(), c.y()}), std::max({a.z(), b.z(), c.z()})}),
+    mA(a), mB(b), mC(c), mNormal(normal)
 {
 
 }
 
 Triangle::Triangle(const Vector &a, const Vector &b, const Vector &c)
-        : mA(a), mB(b), mC(c), mNormal((mB - mA).crossProduct(mC - mA))
+        : Primitive({std::min({a.x(), b.x(), c.x()}), std::min({a.y(), b.y(), c.y()}), std::min({a.z(), b.z(), c.z()})},
+                    {std::max({a.x(), b.x(), c.x()}), std::max({a.y(), b.y(), c.y()}), std::max({a.z(), b.z(), c.z()})}),
+        mA(a), mB(b), mC(c), mNormal((mB - mA).crossProduct(mC - mA))
 {
 }
 
