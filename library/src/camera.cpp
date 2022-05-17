@@ -266,7 +266,9 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     if (!isInShadow || mesh.material().refractionFactor() > 1.0f || mesh.material().isMirror()) {
                         const auto diffuseLightIntensity = light->diffuse(intersectionInfo) * textureLightIntensity;
                         const auto specularLightIntensity = light->specular(intersectionInfo, ray);
-                        accumulatedLightIntensity += diffuseLightIntensity + specularLightIntensity;
+                        accumulatedLightIntensity += diffuseLightIntensity;
+                        accumulatedLightIntensity *= textureLightIntensity;
+                        accumulatedLightIntensity += specularLightIntensity;
 
                         if (mesh.material().isMirror()) {
                             const Vector V = ray.direction().normalize();
@@ -304,7 +306,6 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     } else {
                         accumulatedLightIntensity -= mesh.material().shadowLight();
                     }
-                    accumulatedLightIntensity *= textureLightIntensity;
                 }
             }
         }
