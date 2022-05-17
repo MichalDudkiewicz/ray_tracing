@@ -28,6 +28,10 @@ void Material::setDiffuseLight(const LightIntensity &diffuseLight) {
     mDiffuseLight = diffuseLight;
 }
 
+void Material::setLightEmitted(const LightIntensity &lightEmitted) {
+    mLightEmitted = lightEmitted;
+}
+
 Material::Material(std::string name, LightIntensity lightIntensity, LightIntensity diffuseLight, LightIntensity specularLight, float shininess, bool isMirror)
 : mName(std::move(name)), mAmbientLight(lightIntensity), mDiffuseLight(diffuseLight), mSpecularLight(specularLight), mShininess(shininess), mIsMirror(isMirror)
 {
@@ -76,4 +80,8 @@ void Material::setRefractionFactor(float refractionFactor) {
 
 float Material::refractionFactor() const {
     return mRefractionFactor;
+}
+
+const LightIntensity &Material::lightEmitted() const {
+    return mLightEmitted;
 }

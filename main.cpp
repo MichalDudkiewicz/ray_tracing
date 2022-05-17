@@ -156,7 +156,7 @@ int main() {
 //    task2();
 
 //    taskX();
-    const LightIntensity ambientLight(0.1f, 0.1f, 0.1f);
+    const LightIntensity ambientLight(0.05f, 0.05f, 0.05f);
 
     Mesh leftSideMesh("left");
     const LightIntensity redLight(1.0f);
@@ -209,7 +209,7 @@ int main() {
     const auto mirrorMaterial = std::make_shared<Material>("", ambientLight, greyLight, greyLight, 8.0f);
     mirrorMaterial->setMirror(true);
     sphereMirrorMesh.setMaterial(mirrorMaterial);
-    const Vector sphere1Center(-0.25f, -0.75f, -1.75f);
+    const Vector sphere1Center(0.0f, -0.75f, -1.5f);
     const auto sphere1 = std::make_shared<Sphere>(sphere1Center, 0.25f);
     sphereMirrorMesh.addPrimitive(sphere1);
 
@@ -217,7 +217,7 @@ int main() {
     const auto glassMaterial = std::make_shared<Material>("", ambientLight, greyLight, greyLight, 16.0f);
     glassMaterial->setRefractionFactor(1.52f);
     sphereGlassMesh.setMaterial(glassMaterial);
-    const Vector sphere2Center(0.5f, -0.5f, -1.5f);
+    const Vector sphere2Center(0.75f, -0.75f, -1.25f);
     const auto sphere2 = std::make_shared<Sphere>(sphere2Center, 0.25f);
     sphereGlassMesh.addPrimitive(sphere2);
 

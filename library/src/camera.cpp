@@ -180,7 +180,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
 
 LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
 {
-    LightIntensity accumulatedLightIntensity(0.5, 0.5, 0.5);
+    LightIntensity accumulatedLightIntensity;
     if (reflectedRayCounter < kMaxReflectedRaysNumber) {
         float minDistance = ray.distance();
         for (const auto &mesh: mScene.meshes()) {
@@ -240,9 +240,8 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                         textureLightIntensity = texture->color(u, v);
                     }
                 }
-                const auto ambientLightIntensity = mesh.material().ambientLight() * textureLightIntensity;
 
-                accumulatedLightIntensity = ambientLightIntensity;
+                accumulatedLightIntensity = mesh.material().ambientLight();
 
                 IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint,
                                                   std::get<1>(intersection.value()));
@@ -305,6 +304,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     } else {
                         accumulatedLightIntensity -= mesh.material().shadowLight();
                     }
+                    accumulatedLightIntensity *= textureLightIntensity;
                 }
             }
         }

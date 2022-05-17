@@ -30,6 +30,10 @@ public:
 
     const LightIntensity& shadowLight() const;
 
+    void setLightEmitted(const LightIntensity &lightEmitted);
+
+    const LightIntensity& lightEmitted() const;
+
     float shininess() const;
 
     const std::shared_ptr<Texture> &texture() const;
@@ -43,8 +47,9 @@ private:
     LightIntensity mSpecularLight;
     float mShininess;
     std::shared_ptr<Texture> mTexture;
-    LightIntensity mShadowLightIntensity{0.1, 0.1, 0.1};
+    LightIntensity mShadowLightIntensity{0.05, 0.05, 0.05};
     bool mIsMirror;
     float mRefractionFactor = 1.0f;
+    LightIntensity mLightEmitted;
 };
 
