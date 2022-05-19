@@ -161,6 +161,8 @@ int main() {
     Mesh leftSideMesh("left");
     const LightIntensity redLight(1.0f);
     const auto redMaterial = std::make_shared<Material>("", ambientLight, redLight);
+    const LightIntensity redAlbedo(0.9f, 0.4f, 0.4f);
+    redMaterial->setAbsorbedLight(redAlbedo);
     leftSideMesh.setMaterial(redMaterial);
     const Vector leftSide(-1.0f);
     const Vector leftNormal(1.0f);
@@ -170,6 +172,8 @@ int main() {
     Mesh rightSideMesh("right");
     const LightIntensity blueLight(0.0f, 0.0f, 1.0f);
     const auto blueMaterial = std::make_shared<Material>("", ambientLight, blueLight);
+    const LightIntensity blueAlbedo(0.4f, 0.4f, 0.9f);
+    blueMaterial->setAbsorbedLight(blueAlbedo);
     rightSideMesh.setMaterial(blueMaterial);
     const Vector rightSide(1.0f);
     const Vector rightNormal(-1.0f);
@@ -200,6 +204,8 @@ int main() {
     const LightIntensity greenLight(0.0f, 1.0f, 0.0f);
     const auto greenMaterial = std::make_shared<Material>("", ambientLight, greenLight);
     frontSideMesh.setMaterial(greenMaterial);
+    const LightIntensity greenAlbedo(0.4f, 0.9f, 0.4f);
+    greenMaterial->setAbsorbedLight(greenAlbedo);
     const Vector frontSide(0.0f, 0.0f, 0.5f);
     const Vector frontNormal(0.0f, 0.0f, -1.0f);
     const auto frontWall = std::make_shared<Surface>(frontSide, frontNormal);

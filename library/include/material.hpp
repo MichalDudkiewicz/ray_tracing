@@ -55,6 +55,6 @@ private:
     bool mIsMirror;
     float mRefractionFactor = 1.0f;
     LightIntensity mLightEmitted;
-    LightIntensity mLightAbsorbed{0.8f, 0.8f, 0.8f};
+    LightIntensity mLightAbsorbed{0.5f, 0.5f, 0.5f};
 };
 
