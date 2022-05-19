@@ -7,13 +7,10 @@
 #include <cmath>
 #include "intersection_info.hpp"
 #include "plane.hpp"
+#include <omp.h>
 
 namespace {
-    constexpr int kMaxReflectedRaysNumber = 5;
-}
-
-namespace {
-    constexpr RGBApixel kBackgroundColor{180, 180, 180, 255};
+    constexpr int kMaxReflectedRaysNumber = 2;
 }
 
 void Camera::setPosition(const Vector &newPosition) {
@@ -148,6 +145,8 @@ BMP Camera::render() const {
 
     const float pixelWidth = screenProportion / nx;
     const float pixelHeight = screenProportion / ny;
+
+    #pragma omp parallel for default(shared)
     for (int i = 0; i < image.TellWidth(); i++)
     {
         const float x = float(i + 0.5) / float(image.TellWidth());
@@ -181,7 +180,7 @@ RGBApixel Camera::getColorByPosition(const Vector& position) const {
 LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
 {
     LightIntensity accumulatedLightIntensity;
-    if (reflectedRayCounter < kMaxReflectedRaysNumber) {
+    if (reflectedRayCounter <= kMaxReflectedRaysNumber) {
         float minDistance = ray.distance();
         for (const auto &mesh: mScene.meshes()) {
             if (mesh.hasBoundingBox() && !mesh.intersectsBoundingBox(ray)) {
@@ -241,11 +240,10 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     }
                 }
 
-                accumulatedLightIntensity = mesh.material().ambientLight();
-
                 IntersectionInfo intersectionInfo(mesh.material(), intersectionPoint,
                                                   std::get<1>(intersection.value()));
 
+                accumulatedLightIntensity = mesh.material().ambientLight();
                 for (const auto &light: mScene.lights()) {
                     auto lightDir = light->lightDirection(intersectionInfo.position()).normalize();
                     const Vector beforeIntersectionPoint = intersectionInfo.position() + 0.1 * lightDir;
