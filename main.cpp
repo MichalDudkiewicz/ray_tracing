@@ -234,8 +234,9 @@ int main() {
     scene.addMesh(leftSideMesh);
     scene.addMesh(rightSideMesh);
     scene.addMesh(restSidesMesh);
-    scene.addMesh(sphereMirrorMesh);
     scene.addMesh(frontSideMesh);
+
+    scene.addMesh(sphereMirrorMesh);
     scene.addMesh(sphereGlassMesh);
     scene.addMesh(lightSphereMesh);
 

@@ -30,6 +30,10 @@ public:
 
     const LightIntensity& shadowLight() const;
 
+    const LightIntensity& absorbedLight() const;
+
+    void setAbsorbedLight(const LightIntensity& absorbedLight);
+
     void setLightEmitted(const LightIntensity &lightEmitted);
 
     const LightIntensity& lightEmitted() const;
@@ -51,5 +55,6 @@ private:
     bool mIsMirror;
     float mRefractionFactor = 1.0f;
     LightIntensity mLightEmitted;
+    LightIntensity mLightAbsorbed{0.8f, 0.8f, 0.8f};
 };
 

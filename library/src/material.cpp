@@ -85,3 +85,11 @@ float Material::refractionFactor() const {
 const LightIntensity &Material::lightEmitted() const {
     return mLightEmitted;
 }
+
+void Material::setAbsorbedLight(const LightIntensity &absorbedLight) {
+    mLightAbsorbed = absorbedLight;
+}
+
+const LightIntensity &Material::absorbedLight() const {
+    return mLightAbsorbed;
+}
