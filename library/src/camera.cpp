@@ -326,36 +326,37 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     } else {
                         accumulatedLightIntensity -= mesh.material().shadowLight();
                     }
+                }
 
 #ifdef GLOBAL_ILLUMINATION
-                    if (mesh.material().specularLight().red() == 0.0f && mesh.material().specularLight().green() == 0.0f && mesh.material().specularLight().blue() == 0.0f)
-                    {
-                        // https://www.scratchapixel.com/code.php?id=34&origin=/lessons/3d-basic-rendering/global-illumination-path-tracing
-                        LightIntensity indirectLigthing;
-                        Vector Nt, Nb;
-                        createCoordinateSystem(intersectionInfo.normal(), Nt, Nb);
-                        constexpr float pdf = 1 / (2 * M_PI);
-                        std::random_device rd;
-                        std::mt19937 gen(rd());
-                        std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
-                        for (uint32_t n = 0; n < kSamplesNumber; ++n) {
-                            float r1 = distribution(gen);
-                            float r2 = distribution(gen);
-                            Vector sample = uniformSampleHemisphere(r1, r2);
-                            Vector sampleWorld(
-                                    sample.x() * Nb.x() + sample.y() * intersectionInfo.normal().x() + sample.z() * Nt.x(),
-                                    sample.x() * Nb.y() + sample.y() * intersectionInfo.normal().y() + sample.z() * Nt.y(),
-                                    sample.x() * Nb.z() + sample.y() * intersectionInfo.normal().z() + sample.z() * Nt.z());
-                            const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * sampleWorld;
-                            Ray newRay(beforeIntersectionVPoint, sampleWorld, 1000.0f);
-                            indirectLigthing += traceRay(newRay, reflectedRayCounter + 1) * r1 / pdf;
-                        }
-                        indirectLigthing /= (float)kSamplesNumber;
-                        accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity / M_PI + indirectLigthing) * intersectionInfo.material().absorbedLight();
-//                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight() / M_PI;
+                if (mesh.material().specularLight().red() == 0.0f && mesh.material().specularLight().green() == 0.0f && mesh.material().specularLight().blue() == 0.0f)
+                {
+                    // https://www.scratchapixel.com/code.php?id=34&origin=/lessons/3d-basic-rendering/global-illumination-path-tracing
+                    LightIntensity indirectLigthing;
+                    Vector Nt, Nb;
+                    createCoordinateSystem(intersectionInfo.normal(), Nt, Nb);
+                    constexpr float pdf = 1 / (2 * M_PI);
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
+                    for (uint32_t n = 0; n < kSamplesNumber; ++n) {
+                        float r1 = distribution(gen);
+                        float r2 = distribution(gen);
+                        Vector sample = uniformSampleHemisphere(r1, r2);
+                        Vector sampleWorld(
+                                sample.x() * Nb.x() + sample.y() * intersectionInfo.normal().x() + sample.z() * Nt.x(),
+                                sample.x() * Nb.y() + sample.y() * intersectionInfo.normal().y() + sample.z() * Nt.y(),
+                                sample.x() * Nb.z() + sample.y() * intersectionInfo.normal().z() + sample.z() * Nt.z());
+                        const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * sampleWorld;
+                        Ray newRay(beforeIntersectionVPoint, sampleWorld, 1000.0f);
+                        indirectLigthing += traceRay(newRay, reflectedRayCounter + 1) * r1 / pdf;
                     }
-                    else if (!mesh.material().isMirror())
-                    {
+                    indirectLigthing /= (float)kSamplesNumber;
+                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity / M_PI + indirectLigthing) * intersectionInfo.material().absorbedLight();
+//                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight() / M_PI;
+                }
+                else if (!mesh.material().isMirror())
+                {
                     //specular
                     const Vector V = ray.direction().normalize();
                     const Vector& N = intersectionInfo.normal();
@@ -363,12 +364,11 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * R;
                     Ray newRay(beforeIntersectionVPoint, R, 1000.0f);
                     float cosTheta = newRay.direction().dotProduct(N);
-                    LightIntensity indirectLigthing = traceRay(newRay, reflectedRayCounter + 1) * cosTheta / (2 * M_PI);
+                    LightIntensity indirectLigthing = traceRay(newRay, reflectedRayCounter + 1) * cosTheta / M_PI;
 
                     accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight();
-                    }
-#endif
                 }
+#endif
             }
         }
     }

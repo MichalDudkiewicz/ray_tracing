@@ -172,7 +172,7 @@ int main() {
     Mesh rightSideMesh("right");
     const LightIntensity blueLight(0.0f, 0.0f, 1.0f);
     const auto blueMaterial = std::make_shared<Material>("", ambientLight, blueLight);
-    const LightIntensity blueAlbedo(0.4f, 0.4f, 0.9f);
+    const LightIntensity blueAlbedo(0.5f, 0.5f, 1.0f);
     blueMaterial->setAbsorbedLight(blueAlbedo);
     rightSideMesh.setMaterial(blueMaterial);
     const Vector rightSide(1.0f);
@@ -204,7 +204,7 @@ int main() {
     const LightIntensity greenLight(0.0f, 1.0f, 0.0f);
     const auto greenMaterial = std::make_shared<Material>("", ambientLight, greenLight);
     frontSideMesh.setMaterial(greenMaterial);
-    const LightIntensity greenAlbedo(0.4f, 0.9f, 0.4f);
+    const LightIntensity greenAlbedo(0.5f, 1.0f, 0.5f);
     greenMaterial->setAbsorbedLight(greenAlbedo);
     const Vector frontSide(0.0f, 0.0f, 0.5f);
     const Vector frontNormal(0.0f, 0.0f, -1.0f);
@@ -229,7 +229,7 @@ int main() {
 
     Mesh lightSphereMesh("sferaLight");
     auto lightMaterial = std::make_shared<Material>("", ambientLight, greyLight);
-    const LightIntensity lightEmitted(0.9f, 0.9f, 0.9f);
+    const LightIntensity lightEmitted(0.8f, 0.8f, 0.8f);
     lightMaterial->setLightEmitted(lightEmitted);
     lightSphereMesh.setMaterial(lightMaterial);
     const Vector sphere3Center(-0.5f, -0.75f, -1.0f);
