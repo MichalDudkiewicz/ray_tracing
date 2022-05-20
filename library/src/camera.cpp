@@ -11,7 +11,7 @@
 #include <omp.h>
 
 namespace {
-    constexpr int kMaxReflectedRaysNumber = 1;
+    constexpr int kMaxReflectedRaysNumber = 2;
     constexpr uint32_t kSamplesNumber = 4;
 }
 
@@ -353,6 +353,19 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                         indirectLigthing /= (float)kSamplesNumber;
                         accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity / M_PI + indirectLigthing) * intersectionInfo.material().absorbedLight();
 //                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight() / M_PI;
+                    }
+                    else if (!mesh.material().isMirror())
+                    {
+                    //specular
+                    const Vector V = ray.direction().normalize();
+                    const Vector& N = intersectionInfo.normal();
+                    const Vector R = V - (N * N.dotProduct(V) * 2.0f);
+                    const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * R;
+                    Ray newRay(beforeIntersectionVPoint, R, 1000.0f);
+                    float cosTheta = newRay.direction().dotProduct(N);
+                    LightIntensity indirectLigthing = traceRay(newRay, reflectedRayCounter + 1) * cosTheta / (2 * M_PI);
+
+                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight();
                     }
 #endif
                 }
