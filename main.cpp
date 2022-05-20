@@ -227,14 +227,14 @@ int main() {
     const auto sphere2 = std::make_shared<Sphere>(sphere2Center, 0.25f);
     sphereGlassMesh.addPrimitive(sphere2);
 
-    Mesh lightSphereMesh("sferaLight");
-    auto lightMaterial = std::make_shared<Material>("", ambientLight, greyLight);
-    const LightIntensity lightEmitted(0.8f, 0.8f, 0.8f);
-    lightMaterial->setLightEmitted(lightEmitted);
-    lightSphereMesh.setMaterial(lightMaterial);
-    const Vector sphere3Center(-0.5f, -0.75f, -1.0f);
-    const auto sphere3 = std::make_shared<Sphere>(sphere3Center, 0.25f);
-    lightSphereMesh.addPrimitive(sphere3);
+//    Mesh lightSphereMesh("sferaLight");
+//    auto lightMaterial = std::make_shared<Material>("", ambientLight, greyLight);
+//    const LightIntensity lightEmitted(0.8f, 0.8f, 0.8f);
+//    lightMaterial->setLightEmitted(lightEmitted);
+//    lightSphereMesh.setMaterial(lightMaterial);
+//    const Vector sphere3Center(-0.5f, -0.75f, -1.0f);
+//    const auto sphere3 = std::make_shared<Sphere>(sphere3Center, 0.25f);
+//    lightSphereMesh.addPrimitive(sphere3);
 
     Scene scene;
     scene.addMesh(leftSideMesh);
@@ -244,7 +244,7 @@ int main() {
 
     scene.addMesh(sphereMirrorMesh);
     scene.addMesh(sphereGlassMesh);
-    scene.addMesh(lightSphereMesh);
+//    scene.addMesh(lightSphereMesh);
 
     LightIntensity li(0.3, 0.3, 0.3);
     Vector lp(0.5, 1.0, -1.5);

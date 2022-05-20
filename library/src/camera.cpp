@@ -11,7 +11,7 @@
 #include <omp.h>
 
 namespace {
-    constexpr int kMaxReflectedRaysNumber = 2;
+    constexpr int kMaxReflectedRaysNumber = 1;
     constexpr uint32_t kSamplesNumber = 4;
 }
 
@@ -328,8 +328,10 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     }
                 }
 
+//                accumulatedLightIntensity += intersectionInfo.material().lightEmitted();
+
 #ifdef GLOBAL_ILLUMINATION
-                if (mesh.material().specularLight().red() == 0.0f && mesh.material().specularLight().green() == 0.0f && mesh.material().specularLight().blue() == 0.0f)
+                if (reflectedRayCounter < kMaxReflectedRaysNumber && mesh.material().specularLight().red() == 0.0f && mesh.material().specularLight().green() == 0.0f && mesh.material().specularLight().blue() == 0.0f)
                 {
                     // https://www.scratchapixel.com/code.php?id=34&origin=/lessons/3d-basic-rendering/global-illumination-path-tracing
                     LightIntensity indirectLigthing;
@@ -352,10 +354,9 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                         indirectLigthing += traceRay(newRay, reflectedRayCounter + 1) * r1 / pdf;
                     }
                     indirectLigthing /= (float)kSamplesNumber;
-                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity / M_PI + indirectLigthing) * intersectionInfo.material().absorbedLight();
-//                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight() / M_PI;
+                    accumulatedLightIntensity = (accumulatedLightIntensity / M_PI + 2 * indirectLigthing) * intersectionInfo.material().absorbedLight();
                 }
-                else if (!mesh.material().isMirror())
+                else if (reflectedRayCounter < kMaxReflectedRaysNumber && !mesh.material().isMirror())
                 {
                     //specular
                     const Vector V = ray.direction().normalize();
@@ -366,7 +367,7 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                     float cosTheta = newRay.direction().dotProduct(N);
                     LightIntensity indirectLigthing = traceRay(newRay, reflectedRayCounter + 1) * cosTheta / M_PI;
 
-                    accumulatedLightIntensity = intersectionInfo.material().lightEmitted() + (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight();
+                    accumulatedLightIntensity = (accumulatedLightIntensity + indirectLigthing) * intersectionInfo.material().absorbedLight();
                 }
 #endif
             }
