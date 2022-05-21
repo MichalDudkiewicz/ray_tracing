@@ -11,7 +11,7 @@
 #include <omp.h>
 
 namespace {
-    constexpr int kMaxReflectedRaysNumber = 1;
+    constexpr int kMaxReflectedRaysNumber = 2;
     constexpr uint32_t kSamplesNumber = 4;
 }
 
@@ -349,20 +349,20 @@ LightIntensity Camera::traceRay(const Ray& ray, int reflectedRayCounter) const
                                 sample.x() * Nb.x() + sample.y() * intersectionInfo.normal().x() + sample.z() * Nt.x(),
                                 sample.x() * Nb.y() + sample.y() * intersectionInfo.normal().y() + sample.z() * Nt.y(),
                                 sample.x() * Nb.z() + sample.y() * intersectionInfo.normal().z() + sample.z() * Nt.z());
-                        const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * sampleWorld;
+                        const Vector beforeIntersectionVPoint = intersectionPoint + 0.01 * sampleWorld;
                         Ray newRay(beforeIntersectionVPoint, sampleWorld, 1000.0f);
-                        indirectLigthing += traceRay(newRay, reflectedRayCounter + 1) * r1 / pdf;
+                        indirectLigthing += traceRay(newRay, kMaxReflectedRaysNumber) * r1 / pdf;
                     }
                     indirectLigthing /= (float)kSamplesNumber;
                     accumulatedLightIntensity = (accumulatedLightIntensity / M_PI + 2 * indirectLigthing) * intersectionInfo.material().absorbedLight();
                 }
-                else if (reflectedRayCounter < kMaxReflectedRaysNumber && !mesh.material().isMirror())
+                else if (reflectedRayCounter < kMaxReflectedRaysNumber)
                 {
                     //specular
                     const Vector V = ray.direction().normalize();
                     const Vector& N = intersectionInfo.normal();
                     const Vector R = V - (N * N.dotProduct(V) * 2.0f);
-                    const Vector beforeIntersectionVPoint = intersectionPoint + 0.1 * R;
+                    const Vector beforeIntersectionVPoint = intersectionPoint + 0.01 * R;
                     Ray newRay(beforeIntersectionVPoint, R, 1000.0f);
                     float cosTheta = newRay.direction().dotProduct(N);
                     LightIntensity indirectLigthing = traceRay(newRay, reflectedRayCounter + 1) * cosTheta / M_PI;
